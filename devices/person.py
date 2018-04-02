@@ -55,29 +55,29 @@ class Patient(Person):
         return self.__date_entry
 
     def getTemp(self):
-        return self.__temp + ' ºC'
+        return "%.1f ºC" % self.__temp
 
     def getHeart_rate(self):
-        return self.__heart_rate + ' b/m '
+        return "%.2f b/m" % self.__heart_rate
 
     def getBlood_pressure(self):
-        return self.__b_pressure + ' mmHg'
+        return "%.2f mmHg" % self.__b_pressure
 
     def getDoc_proximity(self):
-        return self.__doc_proximity + ' m'
+        return "%.2f m" % self.__doc_proximity
 
     def getInfo(self):
-        print 'PERSONAL INFO:'
-        print 'Name = ' + self.getName()
-        print 'Personal ID = ' + self.getPersonalid()
-        print
-        print 'PATIENT INFO:'
-        print 'Room = ' + self.__room
-        print 'Date of entry: ' + self.__date_entry
-        print 'Nearest doctor at ' + self.__doc_proximity
-        print
-        print 'STATUS:'
-        print self.__temp + 'ºC ' + self.__heart_rate + 'b/m ' + self.__b_pressure + 'mmHg'
+        print("PERSONAL INFO:")
+        print("Name = " + self.getName())
+        print("Personal ID = " + self.getPersonalid())
+        print()
+        print("PATIENT INFO:")
+        print("Room = " + self.__room)
+        print("Date of entry: " + self.__date_entry)
+        print("Nearest doctor at %f m" % (self.__doc_proximity))
+        print()
+        print("STATUS:")
+        print(self.getTemp()+" "+self.getHeart_rate()+" "+self.getBlood_pressure())
 
     # Setters
     def setRoom(self, room):
@@ -111,20 +111,20 @@ class Doctor(Person):
 
     def getAvailability(self):
         if self.__availability == 0:
-            return 'Available'
+            return "Available"
         else:
-            return 'Occupied'
+            return "Occupied"
 
     def getInfo(self):
-        print 'PERSONAL INFO:'
-        print 'Name = ' + self.getName()
-        print 'Personal ID = ' + self.getPersonalid()
-        print
-        print 'DOC INFO:'
-        print 'doc id =  ' + self.__doc_id
-        print
-        print 'STATUS:'
-        print self.getAvailability()
+        print("PERSONAL INFO:")
+        print("Name = " + self.getName())
+        print("Personal ID = " + self.getPersonalid())
+        print()
+        print("DOC INFO:")
+        print("doc id =  " + self.__doc_id)
+        print()
+        print("STATUS:")
+        print(self.getAvailability())
 
     # Setters
     def setDoc_id(self, id):

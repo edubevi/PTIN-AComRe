@@ -46,17 +46,17 @@ class Ambulance(Vehicle):
 
     def getAvailability(self):
         if self.__availability == 1:
-            return 'Available'
+            return "Available"
         else:
-            return 'Occupied'
+            return "Occupied"
 
     def getInfo(self):
-        print 'VEHICLE INFO:'
-        print 'id = ' + self.getId()
-        print 'type = Ambulance'
-        print
-        print 'STATUS:'
-        print self.getAvailability()
+        print("VEHICLE INFO:")
+        print("id = " + self.getId())
+        print("type = Ambulance")
+        print()
+        print("STATUS:")
+        print(self.getAvailability())
 
     # Setters
     def setFuelAmount(self, fuel):
@@ -67,16 +67,3 @@ class Ambulance(Vehicle):
 
     def setAvailability(self, status):
         self.__availability = status
-
-
-
-
-    # Setters
-    def setId(self, id):
-        self.__v_id = id
-
-    def setLatitude(self, lat):
-        self.__lat = lat
-
-    def setLongitude(self, lon):
-        self.__lon = lon

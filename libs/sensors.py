@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import random
 import numpy
 
@@ -32,7 +31,7 @@ def ips_coordinates(building):
 # Patient sensors
 
 def heart_rate():
-    return random.uniform(40.160)
+    return random.uniform(40.0, 160.0)
 
 def body_temp():
     return random.uniform(35.0, 42.0)
@@ -62,7 +61,7 @@ def tire_pressure():
 # physical devices sensors
 
 def smoke_detector():
-    return numpy.random.choice(numpy.arrange(0, 2), p=[0.95, 0.05])
+    return numpy.random.choice(numpy.arange(0, 2), p=[0.95, 0.05])
 
 
 

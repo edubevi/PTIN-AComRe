@@ -29,16 +29,16 @@ class Smoke_detector(Static_Device):
     # Getters
     def getStatus(self):
         if self.__status == 0:
-            return 'OK'
+            return "OK"
         else:
-            return 'FIRE DETECTED'
+            return "FIRE DETECTED"
 
     def getInfo(self):
-        print 'STATIC DEVICE INFO:'
-        print 'type = smoke_detector'
-        print
-        print 'STATUS:'
-        print self.getStatus()
+        print("STATIC DEVICE INFO:")
+        print("type = smoke_detector")
+        print()
+        print("STATUS:")
+        print(self.getStatus())
 
     # Setters
     def setStatus(self, status):

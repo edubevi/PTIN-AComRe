@@ -51,17 +51,17 @@ if __name__ == '__main__':
             glongitude = dd2dms(float(column[2]))
 
             os.system('clear')
-            print
-            print ' Posicio GPS '
-            print '----------------------------------------'
-            print 'latitud    ' , glatitude
-            print 'longitud   ' , glongitude
-            print 'diahora      ' , time.strftime("%Y/%m/%d"), time.strftime("%H:%M:%S")
-            print '----------------------------------------'
+            print()
+            print(" Posicio GPS ")
+            print("----------------------------------------")
+            print("latitud  %f " % glatitude)
+            print("longitud %f " % glongitude)
+            print("diahora      " + time.strftime("%Y/%m/%d") + time.strftime("%H:%M:%S"))
+            print("----------------------------------------")
 
             time.sleep(2) #temps updates
 
     except (StopIteration):
          pass
     except (KeyboardInterrupt, SystemExit): #ctrl+c
-       print "Done.\nExiting."
+       print("Done.\nExiting.")
