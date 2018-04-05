@@ -3,6 +3,7 @@ class Person:
 
     def __init__(self, name, p_id):
         # Personal info
+        # hola a tots
         self.__name = name
         self.__personal_id = p_id
         # Location
