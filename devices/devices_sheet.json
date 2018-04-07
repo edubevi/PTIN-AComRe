@@ -1,0 +1,104 @@
+{"devices": {
+  "types": ["person","vehicle","static"],
+  "patient": {
+    "device": "patient",
+    "type": "person",
+    "version": "0.0.1",
+    "description": "Device attached to a patient to measure body temperature, heart rate, blood pressure",
+    "properties": {
+      "online": true,
+      "device": "patient",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "body_temperature": 36.0,
+      "body_temperature_unit": "C",
+      "heart_rate": 70.0,
+      "heart_rate_unit": "bpm",
+      "blood_pressure_systolic": 100,
+      "blood_pressure_diastolic": 70,
+      "blood_pressure_unit": "mmHg"
+    }
+  },
+  "doctor": {
+    "device": "doctor",
+    "type": "person",
+    "version": "0.0.1",
+    "description": "Device attached to a doctor to locate him",
+    "properties": {
+      "online": true,
+      "device": "doctor",
+      "id": "",
+      "latitude": "",
+      "longitude": ""
+    }
+  },
+  "ambulance": {
+    "device": "ambulance",
+    "type": "vehicle",
+    "version": "0.0.1",
+    "description": "Smart ambulance with tyre pressure, gas, GPS sensors attached",
+    "properties": {
+      "online": true,
+      "device": "ambulance",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "gas_tank": "",
+      "gas_tank_unit": "L",
+      "range": "",
+      "range_unit": "km",
+      "tyres_pressure_alarm": false
+    }
+  },
+  "smoke": {
+    "device": "smoke_detector",
+    "type": "static",
+    "version": "0.0.1",
+    "description": "Smart smoke detector with alarm status",
+    "properties": {
+      "online": true,
+      "device": "smoke_detector",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "detection_alarm": false
+    }
+  },
+  "weather": {
+    "device": "weather",
+    "type": "static",
+    "version": "0.0.1",
+    "description": "Weather station with humidity, temperature, air pressure sensors",
+    "properties": {
+      "online": true,
+      "device": "weather",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "temperature": "",
+      "temperature_unit": "C",
+      "humidity": "",
+      "humidity_unit": "%",
+      "air_pressure": 1013,
+      "air_pressure_unit": "mbar"
+    }
+  },
+  "air_quality": {
+    "device": "air_quality",
+    "type": "static",
+    "version": "0.0.1",
+    "description": "Air quality smart station",
+    "properties": {
+      "online": true,
+      "device": "air_quality",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "NO2": "",
+      "NO2_unit": "µg/m³",
+      "PM10": "",
+      "PM10_unit": "µg/m³"
+    }
+  }
+} }
