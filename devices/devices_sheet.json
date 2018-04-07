@@ -11,7 +11,7 @@
       "id": "",
       "latitude": "",
       "longitude": "",
-      "moving_status:" false,
+      "moving_status": false,
       "body_temperature": 36.0,
       "body_temperature_unit": "C",
       "heart_rate": 70.0,
@@ -32,7 +32,7 @@
       "id": "",
       "latitude": "",
       "longitude": "",
-      "moving_status:" false
+      "moving_status": false
     }
   },
   "ambulance": {
