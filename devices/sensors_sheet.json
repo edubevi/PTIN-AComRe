@@ -1,0 +1,16 @@
+{
+  "sensors": [
+    "body_thermometer",
+    "heart_rate_monitor",
+    "blood_pressure_monitor",
+    "ips",
+    "gps",
+    "gas_tank",
+    "tyre_pressure_monitor",
+    "smoke_monitor",
+    "thermometer",
+    "hygrometer",
+    "barometer",
+    "quality_monitor"
+  ]
+}

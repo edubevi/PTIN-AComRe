@@ -5,6 +5,7 @@
     "type": "person",
     "version": "0.0.1",
     "description": "Device attached to a patient to measure body temperature, heart rate, blood pressure",
+    "sensors": ["body_thermometer","heart_rate_monitor","blood_pressure_monitor,ips"],
     "properties": {
       "online": true,
       "device": "patient",
@@ -26,6 +27,7 @@
     "type": "person",
     "version": "0.0.1",
     "description": "Device attached to a doctor to locate him",
+    "sensors": ["gps","ips"],
     "properties": {
       "online": true,
       "device": "doctor",
@@ -40,6 +42,7 @@
     "type": "vehicle",
     "version": "0.0.1",
     "description": "Smart ambulance with tyre pressure, gas, GPS sensors attached",
+    "sensors": ["gps","gas_tank","tyre_pressure_monitor"],
     "properties": {
       "online": true,
       "device": "ambulance",
@@ -47,8 +50,8 @@
       "latitude": "",
       "longitude": "",
       "moving_status": false,
-      "gas_tank": "",
-      "gas_tank_unit": "L",
+      "gas_level": "",
+      "gas_level_unit": "L",
       "range": "",
       "range_unit": "km",
       "tyres_pressure_alarm": false
@@ -59,6 +62,7 @@
     "type": "static",
     "version": "0.0.1",
     "description": "Smart smoke detector with alarm status",
+    "sensors": ["smoke_monitor"],
     "properties": {
       "online": true,
       "device": "smoke_detector",
@@ -73,6 +77,7 @@
     "type": "static",
     "version": "0.0.1",
     "description": "Weather station with humidity, temperature, air pressure sensors",
+    "sensors": ["thermometer","hygrometer","barometer"],
     "properties": {
       "online": true,
       "device": "weather",
@@ -92,6 +97,7 @@
     "type": "static",
     "version": "0.0.1",
     "description": "Air quality smart station",
+    "sensors": ["quality_monitor"],
     "properties": {
       "online": true,
       "device": "air_quality",
