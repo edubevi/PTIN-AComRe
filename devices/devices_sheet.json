@@ -89,7 +89,7 @@
       "humidity": "",
       "humidity_unit": "%",
       "air_pressure": 1013,
-      "air_pressure_unit": "mbar"
+      "air_pressure_unit": "hPa"
     }
   },
   "air_quality": {
