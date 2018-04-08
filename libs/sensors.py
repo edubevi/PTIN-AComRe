@@ -1,6 +1,8 @@
 import random
 import numpy
 from libs.real_weather import *
+from libs.helper import *
+from pathlib import Path
 
 # Patient sensors
 
@@ -60,6 +62,38 @@ def blood_pressure_monitor(prev_sys=100, prev_dia=70):
     return final_pr
 
 # Location sensors
+
+
+def gps(route, next_jump = 0, distance=0):
+    folder = Path('libs/routes/')
+    filename = 'route_'+str(route)
+    file= folder / filename
+    path = 'routes/route_'+str(route)
+    n_coordinates = file_lines(file) - 5
+    coordinates = open(file)
+
+    line_offset = []
+    offset = 0
+    for line in coordinates:
+        line_offset.append(offset)
+        offset += len(line)
+    coordinates.seek(0)
+
+    #coordinates.seek(line_offset[n])
+
+    try:
+        for i in range(6 + next_jump):
+            next(coordinates)
+        line = next(coordinates)
+        column = line.split()
+        latitude = float(column[1])
+        longitude = float(column[2])
+        distance += float(column[4])
+    except StopIteration:
+        pass
+    next_jump += 1
+    return latitude, longitude, next_jump, distance
+
 
 def gps_coordinates():
     #latitude range
@@ -140,4 +174,8 @@ def hygrometer():
 def barometer():
     current = get_current_data()
     return current.pressure
+
+
+# air quality
+
 

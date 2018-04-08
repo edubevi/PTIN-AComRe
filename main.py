@@ -22,6 +22,14 @@ if __name__ == '__main__':
 
     a1 = Ambulance('GAX12569')
     lat, lon = gps_coordinates()
+    lat, lon, line, dist = gps(2)
+    print(lat,lon)
+    lat, lon, line, dist = gps(2,line,dist)
+    print(lat,lon)
+    lat, lon, line, dist = gps(2,line,dist)
+    print(lat,lon)
+    lat, lon, line, dist = gps(2,line,dist)
+
     a1.setFuelAmount(gas_tank())
     a1.setTirePressure(tyre_pressure_alarm())
 
