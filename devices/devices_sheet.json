@@ -3,7 +3,6 @@
   "patient": {
     "device": "patient",
     "type": "person",
-    "version": "0.0.1",
     "description": "Device attached to a patient to measure body temperature, heart rate, blood pressure",
     "sensors": ["body_thermometer","heart_rate_monitor","blood_pressure_monitor,ips"],
     "properties": {
@@ -25,7 +24,6 @@
   "doctor": {
     "device": "doctor",
     "type": "person",
-    "version": "0.0.1",
     "description": "Device attached to a doctor to locate him",
     "sensors": ["gps","ips"],
     "properties": {
@@ -40,7 +38,6 @@
   "ambulance": {
     "device": "ambulance",
     "type": "vehicle",
-    "version": "0.0.1",
     "description": "Smart ambulance with tyre pressure, gas, GPS sensors attached",
     "sensors": ["gps","gas_tank","tyre_pressure_monitor"],
     "properties": {
@@ -75,7 +72,6 @@
   "weather": {
     "device": "weather",
     "type": "static",
-    "version": "0.0.1",
     "description": "Weather station with humidity, temperature, air pressure sensors",
     "sensors": ["thermometer","hygrometer","barometer"],
     "properties": {
@@ -95,7 +91,6 @@
   "air_quality": {
     "device": "air_quality",
     "type": "static",
-    "version": "0.0.1",
     "description": "Air quality smart station",
     "sensors": ["quality_monitor"],
     "properties": {
