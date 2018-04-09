@@ -57,6 +57,7 @@ class Ambulance(Vehicle):
         print()
         print("STATUS:")
         print(self.getAvailability())
+        print("Tyre pressure", self.getTirePressure())
 
     # Setters
     def setFuelAmount(self, fuel):

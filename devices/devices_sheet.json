@@ -1,0 +1,108 @@
+{"devices": {
+  "types": ["person","vehicle","static"],
+  "patient": {
+    "device": "patient",
+    "type": "person",
+    "description": "Device attached to a patient to measure body temperature, heart rate, blood pressure",
+    "sensors": ["body_thermometer","heart_rate_monitor","blood_pressure_monitor,ips"],
+    "properties": {
+      "online": true,
+      "device": "patient",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "moving_status": false,
+      "body_temperature": 36.0,
+      "body_temperature_unit": "C",
+      "heart_rate": 70.0,
+      "heart_rate_unit": "bpm",
+      "blood_pressure_systolic": 100,
+      "blood_pressure_diastolic": 70,
+      "blood_pressure_unit": "mmHg"
+    }
+  },
+  "doctor": {
+    "device": "doctor",
+    "type": "person",
+    "description": "Device attached to a doctor to locate him",
+    "sensors": ["gps","ips"],
+    "properties": {
+      "online": true,
+      "device": "doctor",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "moving_status": false
+    }
+  },
+  "ambulance": {
+    "device": "ambulance",
+    "type": "vehicle",
+    "description": "Smart ambulance with tyre pressure, gas, GPS sensors attached",
+    "sensors": ["gps","gas_tank","tyre_pressure_monitor"],
+    "properties": {
+      "online": true,
+      "device": "ambulance",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "moving_status": false,
+      "gas_level": "",
+      "gas_level_unit": "L",
+      "range": "",
+      "range_unit": "km",
+      "tyres_pressure_alarm": false
+    }
+  },
+  "smoke": {
+    "device": "smoke_detector",
+    "type": "static",
+    "version": "0.0.1",
+    "description": "Smart smoke detector with alarm status",
+    "sensors": ["smoke_monitor"],
+    "properties": {
+      "online": true,
+      "device": "smoke_detector",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "detection_alarm": false
+    }
+  },
+  "weather": {
+    "device": "weather",
+    "type": "static",
+    "description": "Weather station with humidity, temperature, air pressure sensors",
+    "sensors": ["thermometer","hygrometer","barometer"],
+    "properties": {
+      "online": true,
+      "device": "weather",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "temperature": "",
+      "temperature_unit": "C",
+      "humidity": "",
+      "humidity_unit": "%",
+      "air_pressure": 1013,
+      "air_pressure_unit": "hPa"
+    }
+  },
+  "air_quality": {
+    "device": "air_quality",
+    "type": "static",
+    "description": "Air quality smart station",
+    "sensors": ["quality_monitor"],
+    "properties": {
+      "online": true,
+      "device": "air_quality",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "NO2": "",
+      "NO2_unit": "µg/m³",
+      "PM10": "",
+      "PM10_unit": "µg/m³"
+    }
+  }
+} }

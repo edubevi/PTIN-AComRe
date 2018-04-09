@@ -1,0 +1,8 @@
+type	latitude	longitude	distance (km)	distance_interval (m)	name	desc
+W	41.223164900	1.733325600			Neàpolis, Rambla de l'Exposició, Vilanova i la Geltrú
+W	41.223509900	1.735217500			41.2235099,1.7352175	Rambla de l'Exposició, 84, 08800 Vilanova i la Geltrú, Barcelona, Spain
+
+type	latitude	longitude	distance (km)	distance_interval (m)	name	desc
+T	41.223010000	1.733400000	0.000		Neàpolis, Rambla de l'Exposició, Vilanova i la Geltrú - Rambla de l'Exposició	0.2 km, 0:02
+T	41.223380000	1.734690000	0.116	115.71
+T	41.223530000	1.735210000	0.162	46.68
