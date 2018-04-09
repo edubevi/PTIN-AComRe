@@ -2,8 +2,21 @@ from devices.person import *
 from devices.vehicle import *
 from devices.static_devices import *
 from libs.sensors import *
+from libs.gps import *
+
+import sys
 
 if __name__ == '__main__':
+
+    if sys.argv[1] == "patient":
+        device = Patient("Marc Marquez","45018752A")
+    elif sys.argv[1] == "ambulance":
+        device = Ambulance("GAX12569")
+    elif sys.argv[1] == "doctor":
+        device = Doctor("Toni Casanova", "21056871B", "AX321256")
+    else:
+        sys.exit(1)
+
 
     p1 = Patient('Marc Marquez', '45018752A','215', '01/04/2018')
     lat, lon = ips_coordinates('Neapolis')

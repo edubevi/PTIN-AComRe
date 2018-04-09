@@ -3,7 +3,6 @@ class Person:
 
     def __init__(self, name, p_id):
         # Personal info
-        # hola a tots
         self.__name = name
         self.__personal_id = p_id
         # Location
@@ -39,10 +38,8 @@ class Person:
 
 class Patient(Person):
 
-    def __init__(self, name, p_id, room, date):
+    def __init__(self, name, p_id):
        super(Patient, self).__init__(name, p_id)
-       self.__room = room
-       self.__date_entry = date
        self.__temp = 38.0
        self.__heart_rate = 90.0
        self.__b_pressure = 60.0
