@@ -6,7 +6,6 @@
     "description": "Device attached to a patient to measure body temperature, heart rate, blood pressure",
     "sensors": ["body_thermometer","heart_rate_monitor","blood_pressure_monitor,ips"],
     "properties": {
-      "online": true,
       "device": "patient",
       "id": "",
       "latitude": "",
@@ -41,7 +40,6 @@
     "description": "Smart ambulance with tyre pressure, gas, GPS sensors attached",
     "sensors": ["gps","gas_tank","tyre_pressure_monitor"],
     "properties": {
-      "online": true,
       "device": "ambulance",
       "id": "",
       "latitude": "",
@@ -61,7 +59,6 @@
     "description": "Smart smoke detector with alarm status",
     "sensors": ["smoke_monitor"],
     "properties": {
-      "online": true,
       "device": "smoke_detector",
       "id": "",
       "latitude": "",
@@ -75,7 +72,6 @@
     "description": "Weather station with humidity, temperature, air pressure sensors",
     "sensors": ["thermometer","hygrometer","barometer"],
     "properties": {
-      "online": true,
       "device": "weather",
       "id": "",
       "latitude": "",
@@ -94,7 +90,6 @@
     "description": "Air quality smart station",
     "sensors": ["quality_monitor"],
     "properties": {
-      "online": true,
       "device": "air_quality",
       "id": "",
       "latitude": "",
