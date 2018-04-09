@@ -55,13 +55,13 @@ class Patient(Person):
         return self.__date_entry
 
     def getTemp(self):
-        return "%.1f ºC" % self.__temp
+        return self.__temp
 
     def getHeart_rate(self):
-        return "%.2f b/m" % self.__heart_rate
+        return self.__heart_rate
 
     def getBlood_pressure(self):
-        return "%.2f mmHg" % self.__b_pressure
+        return self.__b_pressure
 
     def getDoc_proximity(self):
         return "%.2f m" % self.__doc_proximity
@@ -77,7 +77,7 @@ class Patient(Person):
         print("Nearest doctor at %f m" % (self.__doc_proximity))
         print()
         print("STATUS:")
-        print(self.getTemp()+" "+self.getHeart_rate()+" "+self.getBlood_pressure())
+        print(self.getTemp(), self.getHeart_rate(), self.getBlood_pressure())
 
     # Setters
     def setRoom(self, room):

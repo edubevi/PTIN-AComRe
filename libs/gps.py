@@ -8,8 +8,6 @@ from time import *
 import time
 import datetime
 import sys
-import socket
-
 
 def dd2dms(dd):
     is_positive = dd >= 0
@@ -17,7 +15,7 @@ def dd2dms(dd):
     (minutes, seconds) = divmod(dd * 3600, 60)
     (degrees, minutes) = divmod(minutes, 60)
     degrees = (degrees if is_positive else -degrees)
-    return (degrees, minutes, seconds)
+    return degrees, minutes, seconds
 
 
 def get_eta(fname):  # in seconds
@@ -34,39 +32,40 @@ def get_eta(fname):  # in seconds
 
 def file_lines(fname):
     with open(fname) as f:
-        for (i, l) in enumerate(f):
+        for (x, l) in enumerate(f):
             pass
-    return i + 1
+    return x + 1
 
 
-def consume_gas(actual_gas, distance):
+def consume_gas(actual_gas, dist):
     consumption = 7.4
-    if distance == 0:
+    if dist == 0:
         return actual_gas
     else:
-        distance = distance / 100000  # consumption als l/100km
-        consumed = distance * consumption
+        dist = dist / 100000  # consumption als l/100km
+        consumed = dist * consumption
         remaining_gas = actual_gas - consumed
         return remaining_gas
 
 
 if __name__ == '__main__':
 
-    if sys.argv[1] == '1':
-        routename = 'ruta-1.txt'
-    if sys.argv[1] == '2':
-        routename = 'ruta-2.txt'
+    # if sys.argv[1] == '1':
+    #     routename = 'ruta-1.txt'
+    # if sys.argv[1] == '2':
+    #     routename = 'ruta-2.txt'
+    #
+    routename = 'routes/route_1'
     points = file_lines(routename) - 5
     distance = 0
     gas = 100
     try:
         fakegps = open(routename)
-        for i in xrange(6):  # saltarse primeres 6 linies
-            fakegps.next()
+        for i in range(6):  # saltarse primeres 6 linies
+            next(fakegps)
         while True:
-            line = fakegps.next()
+            line = next(fakegps)
             column = line.split()
-            print column
             glatitude = dd2dms(float(column[1]))
             glongitude = dd2dms(float(column[2]))
             distance += float(column[4])
