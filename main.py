@@ -44,3 +44,9 @@ if __name__ == '__main__':
     a1.getInfo()
     print()
     dev1.getInfo()
+
+    w1 = WeatherStation()
+    w1.set_temperature(thermometer())
+    w1.set_humidity(hygrometer())
+    w1.set_air_pressure(barometer())
+    w1.get_info()

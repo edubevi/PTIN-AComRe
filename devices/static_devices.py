@@ -43,3 +43,32 @@ class Smoke_detector(Static_Device):
     # Setters
     def setStatus(self, status):
         self.__status = status
+
+
+class WeatherStation(Static_Device):
+
+    def __init__(self):
+        super(WeatherStation, self).__init__()
+        self.__id = None
+        self.__temp = None
+        self.__temp_unit = "C"
+        self.__hum = None
+        self.__hum_unit = "%"
+        self.__air = None
+        self.__air_unit = "hPa"
+
+    def set_temperature(self, t):
+        self.__temp = t
+
+    def set_humidity(self, h):
+        self.__hum = float(h) * 100
+
+    def set_air_pressure(self, a):
+        self.__air = a
+
+    def get_info(self):
+        print("Weather station:")
+        print()
+        print("Temperatura: %d C" % self.__temp)
+        print("Humitat: %d %%" % self.__hum)
+        print("Pressio aire: %d hPa" % self.__air)
