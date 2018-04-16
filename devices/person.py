@@ -96,6 +96,14 @@ class Patient(Person):
     def setDoc_proximity(self, prox):
         self.__doc_proximity = prox
 
+    def jsonPac(self):
+        return {'id': self.getPersonalid(),
+                'latitude': self.getLatitude(),
+                'longitude': self.getLongitude(),
+                'temp': self.getTemp() ,
+                'heart': self.getHeart_rate(),
+                'bloodD': self.getBlood_pressure()}
+
 
 class Doctor(Person):
     def __init__(self, name, p_id, doc_id):
@@ -131,4 +139,7 @@ class Doctor(Person):
     def setAvailability(self, status):
         self.__availability = status
 
-
+    def jsonDoc(self):
+        return {'id': self.__doc_id,
+                'latitude': self.getLatitude(),
+                'longitude': self.getLongitude()}

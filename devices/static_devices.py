@@ -44,6 +44,12 @@ class Smoke_detector(Static_Device):
     def setStatus(self, status):
         self.__status = status
 
+    def jsonSmoke(self):
+        return {'id': self.__doc_id,
+                'latitude': self.getLatitude(),
+                'longitude': self.getLongitude(),
+                'status': self.getStatus()}
+
 
 class WeatherStation(Static_Device):
 

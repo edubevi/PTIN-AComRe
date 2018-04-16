@@ -68,3 +68,10 @@ class Ambulance(Vehicle):
 
     def setAvailability(self, status):
         self.__availability = status
+
+    def jsonAmb(self):
+        return {'id': self.__doc_id,
+                'latitude': self.getLatitude(),
+                'longitude': self.getLongitude(),
+                'fuel': self.getFuelAmount(),
+                'pressure': self.getTirePressure()}
