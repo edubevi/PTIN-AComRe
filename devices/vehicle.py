@@ -7,6 +7,7 @@ class Vehicle:
         # Location
         self.__lat = None
         self.__lon = None
+        self.__route = None
 
     # Getters
     def getId(self):
@@ -18,6 +19,9 @@ class Vehicle:
     def getLongitude(self):
         return self.__lon
 
+    def getRoute(self):
+        return self.__route
+
     # Setters
     def setId(self, id):
         self.__v_id = id
@@ -28,6 +32,8 @@ class Vehicle:
     def setLongitude(self, lon):
         self.__lon = lon
 
+    def setRoute(self, r):
+        self.__route = r
 
 class Ambulance(Vehicle):
 

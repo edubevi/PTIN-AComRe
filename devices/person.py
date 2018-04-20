@@ -8,6 +8,8 @@ class Person:
         # Location
         self.__lat = None
         self.__lon = None
+        self.__building = None
+        self.__movement = None
 
     # Getters
     def getName(self):
@@ -22,6 +24,12 @@ class Person:
     def getLongitude(self):
         return self.__lon
 
+    def getBuilding(self):
+        return self.__building
+
+    def getMovement(self):
+        return self.__movement
+
     # Setters
     def setName(self, name):
         self.__name = name
@@ -35,6 +43,11 @@ class Person:
     def setLongitude(self, lon):
         self.__lon = lon
 
+    def setBuilding(self, b):
+        self.__building = b
+
+    def setMovement(self, m):
+        self.__movement = m
 
 class Patient(Person):
 

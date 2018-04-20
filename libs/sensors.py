@@ -106,6 +106,7 @@ def gps_coordinates():
 
     return random.uniform(min_lat, max_lat), random.uniform(min_lon,max_lon)
 
+
 def ips_coordinates(building):
     internal_lat = internal_long = 0.0
     if building == 'A':
@@ -115,6 +116,20 @@ def ips_coordinates(building):
         internal_lat = random.uniform(41.223351, 41.223314)
         internal_long = random.uniform(1.736664, 1.734798)
     elif building == 'Neapolis':
+        internal_lat = random.uniform(41.223760, 41.222952)
+        internal_long = random.uniform(1.734363, 1.732982)
+    return internal_lat, internal_long
+
+
+def ips_coordinates_range(x, y):
+    internal_lat = internal_long = 0.0
+    if 41.221814 < x < 41.220892 and 1.730924 < y < 1.729499:
+        internal_lat = random.uniform(41.221814, 41.220892)
+        internal_long = random.uniform(1.730924, 1.729499)
+    elif 41.223351 < x < 41.223314 and 1.736664 < y < 1.734798:
+        internal_lat = random.uniform(41.223351, 41.223314)
+        internal_long = random.uniform(1.736664, 1.734798)
+    elif 41.223760 < x < 41.222952 and 1.734363 < y < 1.732982:
         internal_lat = random.uniform(41.223760, 41.222952)
         internal_long = random.uniform(1.734363, 1.732982)
     return internal_lat, internal_long

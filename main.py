@@ -5,12 +5,56 @@ from libs.sensors import *
 from libs.helper import *
 from faker import Faker
 from libs.send import *
+import sys, threading
 
-import sys
+
+def stay_alive(dev, interval=10):
+    threading.Timer(interval, stay_alive, [dev], {}).start()
+    if type == 1:
+        if dev.getMovement() is 1:
+            x,y = ips_coordinates(dev.getBuilding())
+            dev.setLatitude(x)
+            dev.setLongitude(y)
+        data = dev.jsonDoc()
+        updateDevice(dev.getPersonalid(), data)
+
+    elif type == 2:
+        if dev.getMovement() is 1:
+            x,y = ips_coordinates(dev.getBuilding())
+            dev.setLatitude(x)
+            dev.setLongitude(y)
+        dev.setTemp(body_thermometer(dev.getTemp()))
+        dev.setHeart_rate(heart_rate_monitor(dev.getHeart_rate()))
+        dev.setBlood_pressure(blood_pressure_monitor())
+
+        data = dev.jsonPac()
+        updateDevice(dev.getPersonalid(), data)
+
+    elif type == 3:
+        x,y,_,d = gps(dev.getRoute())
+        dev.setLatitude(x)
+        dev.setLongitude(y)
+        dev.setFuelAmount(gas_tank(d))
+        dev.setTirePressure(tyre_pressure_alarm())
+
+        data = dev.jsonAmb()
+        updateDevice(dev.getId(), data)
+
+    elif type == 4:
+        dev.setStatus(smoke_detector())
+        data = dev.jsonSmoke()
+        updateDevice(dev.getIdDev(), data)
+
+    elif type == 5:
+        dev.set_temperature(thermometer())
+        dev.set_humidity(hygrometer())
+        dev.set_air_pressure(barometer())
+        data = dev.jsonWeather()
+        updateDevice(dev.getIdDev(), data)
+        print(dev.getIdDev(), data)
+
 
 if __name__ == '__main__':
-
-#Doctor 1 pacient 2 ambulancia 3 smoke 4 wheather 5
 
     #init
     fake = Faker('es_ES')
@@ -19,9 +63,12 @@ if __name__ == '__main__':
     if type == 1:
         device = Doctor(fake.name())
         building = random.choice(['A', 'B', 'Neapolis'])
+        device.setBuilding(building)
         x,y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
+        #0 no te moviment es static, 1 es mou
+        device.setMovement(random.randint(0, 1))
 
         deviceID = createDevice(device.jsonRegDoc())
         device.setPersonalid(deviceID)
@@ -29,7 +76,8 @@ if __name__ == '__main__':
     elif type == 2:
         device = Patient(fake.name())
         building = random.choice(['A', 'B', 'Neapolis'])
-        x,y = spawn_position(building)
+        device.setBuilding(building)
+        x, y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
         device.setTemp(body_thermometer())
@@ -42,6 +90,7 @@ if __name__ == '__main__':
     elif type == 3:
         device = Ambulance()
         route = random.choice([1,2,3,4,5,6])
+        device.setRoute(route)
         x,y,_,_ = gps(route)
         device.setLatitude(x)
         device.setLongitude(y)
@@ -52,6 +101,7 @@ if __name__ == '__main__':
     elif type == 4:
         device = Smoke_detector()
         building = random.choice(['A', 'B', 'Neapolis'])
+        device.setBuilding(building)
         x,y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
@@ -62,6 +112,7 @@ if __name__ == '__main__':
     elif type == 5:
         device = WeatherStation()
         building = random.choice(['A', 'B', 'Neapolis'])
+        device.setBuilding(building)
         x,y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
@@ -69,69 +120,14 @@ if __name__ == '__main__':
         deviceID = createDevice(device.jsonRegWheather())
         device.setIdDev(deviceID)
 
+    else:   #default, no type defined
+        device = Doctor(fake.name())
+        building = random.choice(['A', 'B', 'Neapolis'])
+        x,y = spawn_position(building)
+        device.setLatitude(x)
+        device.setLongitude(y)
 
+        deviceID = createDevice(device.jsonRegDoc())
+        device.setPersonalid(deviceID)
 
-
-    device.getInfo()
-    #print()
-    #while True:
-        #data = p1.jsonPac() #guardem a la variable data el json de la informacio de l'objecte
-        #updateDevice(p1.getPersonalid(), data) #fem l'update amb les noves dades ara que ha tenim el dispositiu registrar
-
-
-
-        # if sys.argv[1] == "patient":
-        #     device = Patient("Marc Marquez","45018752A")
-        # elif sys.argv[1] == "ambulance":
-        #     device = Ambulance("GAX12569")
-        # elif sys.argv[1] == "doctor":
-        #     device = Doctor("Toni Casanova", "21056871B", "AX321256")
-        # else:
-        #     sys.exit(1)
-        #
-        #
-        # p1 = Patient('Marc Marquez', '45018752A','215', '01/04/2018')
-        # lat, lon = ips_coordinates('Neapolis')
-        # p1.setLatitude(lat)
-        # p1.setLongitude(lon)
-        # p1.setTemp(body_thermometer())
-        # p1.setTemp(body_thermometer(p1.getTemp()))
-        # p1.setTemp(body_thermometer(p1.getTemp()))
-        # p1.setHeart_rate(heart_rate_monitor())
-        # p1.setHeart_rate(heart_rate_monitor(p1.getHeart_rate()))
-        # p1.setBlood_pressure(blood_pressure_monitor())
-        # d1 = Doctor('Toni Casanova', '21056871B', 'AX321256')
-        # lat, lon = ips_coordinates('B')
-        # d1.setLatitude(lat)
-        # d1.setLongitude(lon)
-        #
-        # a1 = Ambulance('GAX12569')
-        # lat, lon = gps_coordinates()
-        # lat, lon, line, dist = gps(2)
-        # print(lat,lon)
-        # lat, lon, line, dist = gps(2,line,dist)
-        # print(lat,lon)
-        # lat, lon, line, dist = gps(2,line,dist)
-        # print(lat,lon)
-        # lat, lon, line, dist = gps(2,line,dist)
-        #
-        # a1.setFuelAmount(gas_tank())
-        # a1.setTirePressure(tyre_pressure_alarm())
-        #
-        # dev1 = Smoke_detector()
-        # dev1.setStatus(smoke_detector())
-        #
-        #
-        # p1.getInfo()
-        # print()
-        # d1.getInfo()
-        # print()
-        # a1.getInfo()
-        # print()
-        # dev1.getInfo()
-        #
-        # w1 = WeatherStation()
-        # w1.set_temperature(thermometer())
-        # w1.set_humidity(hygrometer())
-        # w1.set_air_pressure(barometer())
-        # w1.get_info()
+    stay_alive(device,10)

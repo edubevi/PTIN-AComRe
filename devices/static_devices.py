@@ -5,6 +5,7 @@ class Static_Device:
         self.__idDev = None
         self.__lat = None
         self.__lon = None
+        self.__building = None
 
     # Getters
     def getIdDev(self):
@@ -16,6 +17,9 @@ class Static_Device:
     def getLongitude(self):
         return self.__lon
 
+    def getBuilding(self):
+        return self.__building
+
     # Setters
     def setIdDev(self, idDev):
         self.__idDev = idDev
@@ -25,6 +29,9 @@ class Static_Device:
 
     def setLongitude(self, lon):
         self.__lon = lon
+
+    def setBuilding(self, b):
+        self.__building = b
 
 
 class Smoke_detector(Static_Device):
