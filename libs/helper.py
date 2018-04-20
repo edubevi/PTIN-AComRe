@@ -22,17 +22,6 @@ def random_dni():
     return (lambda x: '%s%s' % (x, "TRWAGMYFPDXBNJZSQVHLCKE"[x % 23]))(random.randint(10000000, 99999999))
 
 
-def random_plate():
-    plate = []
-    for _ in range(4):
-        plate.append(random.randint(0, 9))
-    for _ in range(3):
-        plate.append(random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ'))
-
-    plate = ''.join(str(e) for e in plate)
-    return plate
-
-
 def spawn_position(building=random.choice(['A', 'B', 'Neapolis'])):
     internal_lat = internal_long = 0.0
     if building == 'A':

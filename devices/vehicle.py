@@ -1,3 +1,5 @@
+import random
+
 
 class Vehicle:
 
@@ -7,6 +9,7 @@ class Vehicle:
         # Location
         self.__lat = None
         self.__lon = None
+        self.__plate = self.random_plate()
         self.__route = None
 
     # Getters
@@ -22,6 +25,9 @@ class Vehicle:
     def getRoute(self):
         return self.__route
 
+    def getPlate(self):
+        return self.__plate
+
     # Setters
     def setId(self, id):
         self.__v_id = id
@@ -35,10 +41,21 @@ class Vehicle:
     def setRoute(self, r):
         self.__route = r
 
+    def random_plate(self):
+        plate = []
+        for _ in range(4):
+            plate.append(random.randint(0, 9))
+        for _ in range(3):
+            plate.append(random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ'))
+
+        plate = ''.join(str(e) for e in plate)
+        return plate
+
+
 class Ambulance(Vehicle):
 
     def __init__(self):
-        super(Ambulance, self).__init__(id)
+        super(Ambulance, self).__init__()
         self.__fuel = None
         self.__t_pressure = None
         self.__availability = 1
@@ -56,6 +73,9 @@ class Ambulance(Vehicle):
             return "Available"
         else:
             return "Occupied"
+
+    def getType(self):
+        return self.__type
 
     def getInfo(self):
         print("VEHICLE INFO:")
@@ -77,11 +97,11 @@ class Ambulance(Vehicle):
         self.__availability = status
 
     def jsonRegAmb(self):
-        return {'name': self.getName(),
+        return {'name': self.getPlate(),
                 'type': self.getType()}
 
     def jsonAmb(self):
-        return {'id': self.__doc_id,
+        return {'id': self.getId(),
                 'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'fuel': self.getFuelAmount(),
