@@ -1,3 +1,5 @@
+from faker import Faker
+
 class Static_Device:
 
     def __init__(self):
@@ -6,6 +8,9 @@ class Static_Device:
         self.__lat = None
         self.__lon = None
         self.__building = None
+        fake = Faker()
+        self.__name = fake.mac_address()
+
 
     # Getters
     def getIdDev(self):
@@ -19,6 +24,9 @@ class Static_Device:
 
     def getBuilding(self):
         return self.__building
+
+    def getName(self):
+        return self.__name
 
     # Setters
     def setIdDev(self, idDev):

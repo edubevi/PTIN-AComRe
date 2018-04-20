@@ -51,7 +51,6 @@ def stay_alive(dev, interval=10):
         dev.set_air_pressure(barometer())
         data = dev.jsonWeather()
         updateDevice(dev.getIdDev(), data)
-        print(dev.getIdDev(), data)
 
 
 if __name__ == '__main__':
