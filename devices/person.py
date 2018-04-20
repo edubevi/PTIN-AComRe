@@ -1,10 +1,10 @@
 
 class Person:
 
-    def __init__(self, name, p_id):
+    def __init__(self, name):
         # Personal info
         self.__name = name
-        self.__personal_id = p_id
+        self.__personal_id = None
         # Location
         self.__lat = None
         self.__lon = None
@@ -38,14 +38,18 @@ class Person:
 
 class Patient(Person):
 
-    def __init__(self, name, p_id):
-       super(Patient, self).__init__(name, p_id)
+    def __init__(self, name):
+       super(Patient, self).__init__(name)
        self.__temp = 38.0
        self.__heart_rate = 90.0
        self.__b_pressure = 60.0
        self.__doc_proximity = 0
+       self.__type = 2
 
     # Getters
+    def getType(self):
+        return self.__type
+
     def getRoom(self):
         return self.__name
 
@@ -96,9 +100,12 @@ class Patient(Person):
     def setDoc_proximity(self, prox):
         self.__doc_proximity = prox
 
+    def jsonRegPac(self):
+        return {'name': self.getName(),
+                'type': self.getType()}
+
     def jsonPac(self):
-        return {'id': self.getPersonalid(),
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'temp': self.getTemp() ,
                 'heart': self.getHeart_rate(),
@@ -110,8 +117,12 @@ class Doctor(Person):
         super(Doctor, self).__init__(name, p_id)
         self.__doc_id = doc_id
         self.__availability = 0
+        self.__type = 1
 
     # Getters
+    def getType(self):
+        return self.__type
+
     def getDoc_id(self):
         return self.__doc_id
 
@@ -139,7 +150,10 @@ class Doctor(Person):
     def setAvailability(self, status):
         self.__availability = status
 
+    def jsonRegDoc(self):
+        return {'name': self.getName(),
+                'type': self.getType()}
+
     def jsonDoc(self):
-        return {'id': self.__doc_id,
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude()}
