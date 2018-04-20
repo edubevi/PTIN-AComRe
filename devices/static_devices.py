@@ -2,10 +2,14 @@ class Static_Device:
 
     def __init__(self):
         # Location
+        self.__idDev = None
         self.__lat = None
         self.__lon = None
 
     # Getters
+    def getIdDev(self):
+        return self.__idDev
+
     def getLatitude(self):
         return self.__lat
 
@@ -13,6 +17,9 @@ class Static_Device:
         return self.__lon
 
     # Setters
+    def setIdDev(self, idDev):
+        self.__idDev = idDev
+
     def setLatitude(self, lat):
         self.__lat = lat
 
@@ -25,6 +32,7 @@ class Smoke_detector(Static_Device):
     def __init__(self):
         super(Smoke_detector, self).__init__()
         self.__status = 0
+        self.__type = 4
 
     # Getters
     def getStatus(self):
@@ -44,9 +52,12 @@ class Smoke_detector(Static_Device):
     def setStatus(self, status):
         self.__status = status
 
+    def jsonRegSmoke(self):
+        return {'name': self.getName(),
+                'type': self.getType()}
+
     def jsonSmoke(self):
-        return {'id': self.__doc_id,
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'status': self.getStatus()}
 
@@ -62,6 +73,7 @@ class WeatherStation(Static_Device):
         self.__hum_unit = "%"
         self.__air = None
         self.__air_unit = "hPa"
+        self.__type = 5
 
     def set_temperature(self, t):
         self.__temp = t
@@ -72,9 +84,21 @@ class WeatherStation(Static_Device):
     def set_air_pressure(self, a):
         self.__air = a
 
+
     def get_info(self):
         print("Weather station:")
         print()
         print("Temperatura: %d C" % self.__temp)
         print("Humitat: %d %%" % self.__hum)
         print("Pressio aire: %d hPa" % self.__air)
+
+    def jsonRegWheather(self):
+        return {'name': self.getName(),
+                'type': self.getType()}
+
+    def jsonWeather(self):
+        return {'latitude': self.getLatitude(),
+                'longitude': self.getLongitude(),
+                'temperature': self.__temp(),
+                'humidity': self.__hum,
+                'air': self.__air}

@@ -4,6 +4,7 @@ from devices.static_devices import *
 from libs.sensors import *
 from libs.helper import *
 from faker import Faker
+from libs.send import *
 
 import sys
 
@@ -16,14 +17,17 @@ if __name__ == '__main__':
     type = int(sys.argv[1])
 
     if type == 1:
-        device = Doctor(fake.name(), random_dni())
+        device = Doctor(fake.name())
         building = random.choice(['A', 'B', 'Neapolis'])
         x,y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
 
+        deviceID = createDevice(device.jsonRegDoc())
+        device.setPersonalid(deviceID)
+
     elif type == 2:
-        device = Patient(fake.name(), random_dni())
+        device = Patient(fake.name())
         building = random.choice(['A', 'B', 'Neapolis'])
         x,y = spawn_position(building)
         device.setLatitude(x)
@@ -32,17 +36,47 @@ if __name__ == '__main__':
         device.setHeart_rate(heart_rate_monitor())
         device.setBlood_pressure(blood_pressure_monitor())
 
+        deviceID = createDevice(device.jsonRegPac())
+        device.setPersonalid(deviceID)
+
     elif type == 3:
-        device = Ambulance(random_plate())
+        device = Ambulance()
+        route = random.choice([1,2,3,4,5,6])
+        x,y,_,_ = gps(route)
+        device.setLatitude(x)
+        device.setLongitude(y)
+
+        deviceID = createDevice(device.jsonRegAmb())
+        device.setId(deviceID)
 
     elif type == 4:
-        pass
+        device = Smoke_detector()
+        building = random.choice(['A', 'B', 'Neapolis'])
+        x,y = spawn_position(building)
+        device.setLatitude(x)
+        device.setLongitude(y)
+
+        deviceID = createDevice(device.jsonRegSmoke())
+        device.setIdDev(deviceID)
+
+    elif type == 5:
+        device = WeatherStation()
+        building = random.choice(['A', 'B', 'Neapolis'])
+        x,y = spawn_position(building)
+        device.setLatitude(x)
+        device.setLongitude(y)
+
+        deviceID = createDevice(device.jsonRegWheather())
+        device.setIdDev(deviceID)
+
+
 
 
     device.getInfo()
-    print()
-    while True:
-
+    #print()
+    #while True:
+        #data = p1.jsonPac() #guardem a la variable data el json de la informacio de l'objecte
+        #updateDevice(p1.getPersonalid(), data) #fem l'update amb les noves dades ara que ha tenim el dispositiu registrar
 
 
 
