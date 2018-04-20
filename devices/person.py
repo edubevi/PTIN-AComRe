@@ -1,10 +1,10 @@
 
 class Person:
 
-    def __init__(self, name):
+    def __init__(self, name, p_id):
         # Personal info
         self.__name = name
-        self.__personal_id = None
+        self.__personal_id = p_id
         # Location
         self.__lat = None
         self.__lon = None
@@ -38,18 +38,14 @@ class Person:
 
 class Patient(Person):
 
-    def __init__(self, name):
-       super(Patient, self).__init__(name)
+    def __init__(self, name, p_id):
+       super(Patient, self).__init__(name, p_id)
        self.__temp = 38.0
        self.__heart_rate = 90.0
        self.__b_pressure = 60.0
        self.__doc_proximity = 0
-       self.__type = 2
 
     # Getters
-    def getType(self):
-        return self.__type
-
     def getRoom(self):
         return self.__name
 
@@ -100,12 +96,9 @@ class Patient(Person):
     def setDoc_proximity(self, prox):
         self.__doc_proximity = prox
 
-    def jsonRegPac(self):
-        return {'name': self.getName(),
-                'type': self.getType()}
-
     def jsonPac(self):
-        return {'latitude': self.getLatitude(),
+        return {'id': self.getPersonalid(),
+                'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'temp': self.getTemp() ,
                 'heart': self.getHeart_rate(),
@@ -113,19 +106,11 @@ class Patient(Person):
 
 
 class Doctor(Person):
-    def __init__(self, name, p_id, doc_id):
+    def __init__(self, name, p_id):
         super(Doctor, self).__init__(name, p_id)
-        self.__doc_id = doc_id
         self.__availability = 0
-        self.__type = 1
 
     # Getters
-    def getType(self):
-        return self.__type
-
-    def getDoc_id(self):
-        return self.__doc_id
-
     def getAvailability(self):
         if self.__availability == 0:
             return "Available"
@@ -136,24 +121,15 @@ class Doctor(Person):
         print("PERSONAL INFO:")
         print("Name = " + self.getName())
         print("Personal ID = " + self.getPersonalid())
-        print()
-        print("DOC INFO:")
-        print("doc id =  " + self.__doc_id)
-        print()
+        print("Position %f, %f" % (self.getLatitude(), self.getLatitude()))
         print("STATUS:")
         print(self.getAvailability())
 
     # Setters
-    def setDoc_id(self, id):
-        self.__doc_id = id
-
     def setAvailability(self, status):
         self.__availability = status
 
-    def jsonRegDoc(self):
-        return {'name': self.getName(),
-                'type': self.getType()}
-
     def jsonDoc(self):
-        return {'latitude': self.getLatitude(),
+        return {'id': self.getPersonalid(),
+                'latitude': self.getLatitude(),
                 'longitude': self.getLongitude()}

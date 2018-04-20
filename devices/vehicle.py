@@ -1,9 +1,9 @@
 
 class Vehicle:
 
-    def __init__(self):
+    def __init__(self, id):
         # Vehicle info
-        self.__v_id = None
+        self.__v_id = id
         # Location
         self.__lat = None
         self.__lon = None
@@ -31,12 +31,11 @@ class Vehicle:
 
 class Ambulance(Vehicle):
 
-    def __init__(self):
+    def __init__(self, id):
         super(Ambulance, self).__init__(id)
         self.__fuel = None
         self.__t_pressure = None
         self.__availability = 1
-        self.__type = 3
 
     # Getters
     def getFuelAmount(self):
@@ -70,12 +69,8 @@ class Ambulance(Vehicle):
     def setAvailability(self, status):
         self.__availability = status
 
-    def jsonRegAmb(self):
-        return {'name': self.getName(),
-                'type': self.getType()}
-
     def jsonAmb(self):
-        return {'id': self.__doc_id,
+        return {'id': self.__v_id,
                 'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'fuel': self.getFuelAmount(),
