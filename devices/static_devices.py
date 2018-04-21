@@ -1,5 +1,6 @@
 from faker import Faker
 
+
 class Static_Device:
 
     def __init__(self):
@@ -50,6 +51,9 @@ class Smoke_detector(Static_Device):
         self.__type = 4
 
     # Getters
+    def getType(self):
+        return self.__type
+
     def getStatus(self):
         if self.__status == 0:
             return "OK"
@@ -72,7 +76,8 @@ class Smoke_detector(Static_Device):
                 'type': self.getType()}
 
     def jsonSmoke(self):
-        return {'latitude': self.getLatitude(),
+        return {'id': self.getIdDev(),
+                'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'status': self.getStatus()}
 
@@ -99,6 +104,8 @@ class WeatherStation(Static_Device):
     def set_air_pressure(self, a):
         self.__air = a
 
+    def getType(self):
+        return self.__type
 
     def get_info(self):
         print("Weather station:")
@@ -112,8 +119,9 @@ class WeatherStation(Static_Device):
                 'type': self.getType()}
 
     def jsonWeather(self):
-        return {'latitude': self.getLatitude(),
+        return {'id': self.getIdDev(),
+                'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
-                'temperature': self.__temp(),
+                'temperature': self.__temp,
                 'humidity': self.__hum,
                 'air': self.__air}

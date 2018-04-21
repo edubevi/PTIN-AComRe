@@ -166,12 +166,12 @@ def amb_availability():
     return random.randrange(2)
 
 def tyre_pressure_alarm():
-    return numpy.random.choice(numpy.arange(0, 2), p=[0.95, 0.05])
+    return numpy.random.choice(numpy.arange(0, 2), p=[0.98, 0.02])
 
 # physical devices sensors
 
 def smoke_detector():
-    return numpy.random.choice(numpy.arange(0, 2), p=[0.95, 0.05])
+    return numpy.random.choice(numpy.arange(0, 2), p=[0.99, 0.01])
 
 
 # weather
