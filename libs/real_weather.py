@@ -1,6 +1,6 @@
 import forecastio
 
-api_key = "e326fd210528c506641f454726a95bfc"
+api_key = "413580f0df4f6db0481a5611321ac32a"
 lat = 41.222576
 lng = 1.732158
 
