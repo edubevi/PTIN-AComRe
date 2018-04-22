@@ -18,6 +18,7 @@ def stay_alive(dev, interval=10):
             dev.setLatitude(x)
             dev.setLongitude(y)
         data = dev.jsonDoc()
+        print(data)
         updateDevice(dev.getPersonalid(), data)
 
     elif type == 2:
@@ -30,6 +31,7 @@ def stay_alive(dev, interval=10):
         dev.setBlood_pressure(blood_pressure_monitor())
 
         data = dev.jsonPac()
+        print(data)
         updateDevice(dev.getPersonalid(), data)
 
     elif type == 3:
@@ -40,6 +42,7 @@ def stay_alive(dev, interval=10):
         dev.setTirePressure(tyre_pressure_alarm())
 
         data = dev.jsonAmb()
+        print(data)
         updateDevice(dev.getId(), data)
 
     elif type == 4:
@@ -53,6 +56,7 @@ def stay_alive(dev, interval=10):
         dev.set_humidity(hygrometer())
         dev.set_air_pressure(barometer())
         data = dev.jsonWeather()
+        print(data)
         updateDevice(dev.getIdDev(), data)
 
 def usage():
