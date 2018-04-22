@@ -90,6 +90,7 @@ if __name__ == '__main__':
         device.setMovement(random.randint(0, 1))
 
         deviceID = createDevice(device.jsonRegDoc())
+        print("API: device type %d registered with ID %s" % (type, deviceID))
         device.setPersonalid(deviceID)
 
         if interval is None:
@@ -108,6 +109,7 @@ if __name__ == '__main__':
         device.setBlood_pressure(blood_pressure_monitor())
 
         deviceID = createDevice(device.jsonRegPac())
+        print("API: device type %d registered with ID %s" % (type, deviceID))
         device.setPersonalid(deviceID)
 
         if interval is None:
@@ -123,6 +125,7 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegAmb())
+        print("API: device type %d registered with ID %s" % (type, deviceID))
         device.setId(deviceID)
 
         if interval is None:
@@ -138,6 +141,7 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegSmoke())
+        print("API: device type %d registered with ID %s" % (type, deviceID))
         device.setIdDev(deviceID)
 
         if interval is None:
@@ -153,6 +157,7 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegWheather())
+        print("API: device type %d registered with ID %s" % (type, deviceID))
         device.setIdDev(deviceID)
 
         if interval is None:
