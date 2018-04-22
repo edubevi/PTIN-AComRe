@@ -7,6 +7,7 @@ from faker import Faker
 from libs.send import *
 import sys
 import threading
+import getopt
 
 
 def stay_alive(dev, interval=10):
@@ -17,6 +18,7 @@ def stay_alive(dev, interval=10):
             dev.setLatitude(x)
             dev.setLongitude(y)
         data = dev.jsonDoc()
+        print(data)
         updateDevice(dev.getPersonalid(), data)
 
     elif type == 2:
@@ -29,6 +31,7 @@ def stay_alive(dev, interval=10):
         dev.setBlood_pressure(blood_pressure_monitor())
 
         data = dev.jsonPac()
+        print(data)
         updateDevice(dev.getPersonalid(), data)
 
     elif type == 3:
@@ -39,6 +42,7 @@ def stay_alive(dev, interval=10):
         dev.setTirePressure(tyre_pressure_alarm())
 
         data = dev.jsonAmb()
+        print(data)
         updateDevice(dev.getId(), data)
 
     elif type == 4:
@@ -52,14 +56,28 @@ def stay_alive(dev, interval=10):
         dev.set_humidity(hygrometer())
         dev.set_air_pressure(barometer())
         data = dev.jsonWeather()
+        print(data)
         updateDevice(dev.getIdDev(), data)
 
+def usage():
+    print("usage: main.py -t <device_type> -i <time_interval>")
+    sys.exit(2)
 
 if __name__ == '__main__':
 
     #init
     fake = Faker('es_ES')
-    type = int(sys.argv[1])
+
+    try:
+        opts, args = getopt.getopt(sys.argv[1:],"t:i:",["type=","interval="])
+    except getopt.GetoptError:
+        usage()
+    interval = None
+    for opt, arg in opts:
+        if opt in ("-t", "--type"):
+            type = int(arg)
+        elif opt in ("-i", "--interval"):
+            interval = int(arg)
 
     if type == 1:
         device = Doctor(fake.name())
@@ -72,9 +90,12 @@ if __name__ == '__main__':
         device.setMovement(random.randint(0, 1))
 
         deviceID = createDevice(device.jsonRegDoc())
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
         device.setPersonalid(deviceID)
 
-        stay_alive(device, 10)
+        if interval is None:
+            interval = 10
+        stay_alive(device, interval)
 
     elif type == 2:
         device = Patient(fake.name())
@@ -88,9 +109,12 @@ if __name__ == '__main__':
         device.setBlood_pressure(blood_pressure_monitor())
 
         deviceID = createDevice(device.jsonRegPac())
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
         device.setPersonalid(deviceID)
 
-        stay_alive(device, 10)
+        if interval is None:
+            interval = 10
+        stay_alive(device, interval)
 
     elif type == 3:
         device = Ambulance()
@@ -101,8 +125,11 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegAmb())
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID))
         device.setId(deviceID)
 
+        if interval is None:
+            interval = 5
         stay_alive(device, 5)
 
     elif type == 4:
@@ -114,9 +141,12 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegSmoke())
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
         device.setIdDev(deviceID)
 
-        stay_alive(device, 10)
+        if interval is None:
+            interval = 10
+        stay_alive(device, interval)
 
     elif type == 5:
         device = WeatherStation()
@@ -127,19 +157,12 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegWheather())
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
         device.setIdDev(deviceID)
 
-        stay_alive(device, 900) # 900 seconds = 15 min to limit api calls
+        if interval is None:
+            interval = 900
+        stay_alive(device, interval) # 900 seconds = 15 min to limit api calls
 
     else:   # default, no type defined
-        device = Doctor(fake.name())
-        building = random.choice(['A', 'B', 'Neapolis'])
-        x,y = spawn_position(building)
-        device.setLatitude(x)
-        device.setLongitude(y)
-
-        deviceID = createDevice(device.jsonRegDoc())
-        device.setPersonalid(deviceID)
-
-        stay_alive(device, 10)
-
+        usage()
