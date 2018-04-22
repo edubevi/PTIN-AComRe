@@ -69,7 +69,7 @@ if __name__ == '__main__':
     try:
         opts, args = getopt.getopt(argv,"t:i:",["type=","interval="])
     except getopt.GetoptError:
-        print usage()
+        usage()
     interval = None
     for opt, arg in opts:
         if opt in ("-t", "--type"):
