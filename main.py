@@ -67,7 +67,7 @@ if __name__ == '__main__':
     fake = Faker('es_ES')
 
     try:
-        opts, args = getopt.getopt(argv,"t:i:",["type=","interval="])
+        opts, args = getopt.getopt(sys.argv[1:],"t:i:",["type=","interval="])
     except getopt.GetoptError:
         usage()
     interval = None
