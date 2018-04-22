@@ -11,9 +11,7 @@ import getopt
 
 
 def stay_alive(dev, interval=10):
-    thread = threading.Timer(interval, stay_alive, [dev], {})
-    thread.daemon = True
-    thread.start()
+    threading.Timer(interval, stay_alive, [dev], {}).start()
     if type == 1:
         if dev.getMovement() is 1:
             x, y = ips_coordinates(dev.getBuilding())
