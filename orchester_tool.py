@@ -110,10 +110,8 @@ if __name__ == '__main__':
     # instantiate a client to talk with Docker daemon.
     usage()
     client = docker.from_env()
+    #Inicialitza el nombre de dispositius que hi ha en execució per tipus.
     init_num_devices(client)
-    print(num_devices)
-    input("Press ENTER to continue...")
-    time.sleep(3)
     op = 0
     while op != 6:
         menu()
