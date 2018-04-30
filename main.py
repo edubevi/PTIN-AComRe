@@ -35,10 +35,11 @@ def stay_alive(dev, interval=10):
         updateDevice(dev.getPersonalid(), data)
 
     elif type == 3:
-        x,y,_,d = gps(dev.getRoute())
+        f = dev.getFuelAmount()
+        x,y,f,d = gps(dev.getRoute())
         dev.setLatitude(x)
         dev.setLongitude(y)
-        dev.setFuelAmount(gas_tank(d))
+        dev.setFuelAmount(f,gas_tank(d))
         dev.setTirePressure(tyre_pressure_alarm())
 
         data = dev.jsonAmb()
