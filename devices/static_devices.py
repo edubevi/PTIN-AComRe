@@ -18,10 +18,10 @@ class Static_Device:
         return self.__idDev
 
     def getLatitude(self):
-        return self.__lat
+        return float(self.__lat)
 
     def getLongitude(self):
-        return self.__lon
+        return float(self.__lon)
 
     def getBuilding(self):
         return self.__building
