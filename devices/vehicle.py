@@ -17,10 +17,10 @@ class Vehicle:
         return self.__v_id
 
     def getLatitude(self):
-        return self.__lat
+        return float(self.__lat)
 
     def getLongitude(self):
-        return self.__lon
+        return float(self.__lon)
 
     def getRoute(self):
         return self.__route
