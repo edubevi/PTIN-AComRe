@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import time, docker, subprocess, sys
+import time, docker, subprocess, sys, json
 
 #List of allowed devices with their type id.
 devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5}
@@ -115,7 +115,8 @@ def show_stats(client):
         for container in container_list:
             print(container.short_id, end='\t')
             print(container.name, end='\t')
-            print(container.stats, end='\t')
+            s = container.stats(stream=False)
+            print(json.dumps(s, indent=4), end='\t')
             print("-",end='\t\t')
 
 
