@@ -108,7 +108,7 @@ def init_num_devices(client):
     if len(wea_list) != 0: num_devices["weather"] = len(wea_list)
 
 
-def show_stats():
+def show_stats(client):
     container_list = client.containers.list()
     if len(container_list) == 0: print("There are no running containers.")
     else:
