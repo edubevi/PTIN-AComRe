@@ -39,7 +39,7 @@ def stay_alive(dev, interval=10):
         x,y,f,d = gps(dev.getRoute())
         dev.setLatitude(x)
         dev.setLongitude(y)
-        dev.setFuelAmount(f,gas_tank(d))
+        dev.setFuelAmount(gas_tank(f, d))
         dev.setTirePressure(tyre_pressure_alarm())
 
         data = dev.jsonAmb()
