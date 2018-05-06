@@ -35,10 +35,11 @@ def stay_alive(dev, interval=10):
         updateDevice(dev.getPersonalid(), data)
 
     elif type == 3:
-        x,y,_,d = gps(dev.getRoute())
+        f = dev.getFuelAmount()
+        x,y,f,d = gps(dev.getRoute())
         dev.setLatitude(x)
         dev.setLongitude(y)
-        dev.setFuelAmount(gas_tank(d))
+        dev.setFuelAmount(gas_tank(f, d))
         dev.setTirePressure(tyre_pressure_alarm())
 
         data = dev.jsonAmb()
@@ -91,6 +92,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegDoc())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID)
 
         if interval is None:
@@ -110,6 +112,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegPac())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID)
 
         if interval is None:
@@ -126,6 +129,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegAmb())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
         device.setId(deviceID)
 
         if interval is None:
@@ -141,6 +145,7 @@ if __name__ == '__main__':
         device.setLongitude(y)
         deviceID = createDevice(device.jsonRegSmoke())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID)
 
         if interval is None:
@@ -157,6 +162,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegWheather())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID)
 
         if interval is None:
