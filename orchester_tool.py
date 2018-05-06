@@ -27,8 +27,9 @@ def menu():
     print("[3] Show running containers.")
     print("[4] Stop all running containers.")
     print("[5] Delete all stopped containers.")
+    print("[6] Show containers stats.")
     print("")
-    print("[6] Exit.")
+    print("[7] Exit.")
     print("------------------------------------")
 
 def create_container(client, type, num):
@@ -106,6 +107,19 @@ def init_num_devices(client):
     wea_list = client.containers.list(filters={'name': "weather_*"})
     if len(wea_list) != 0: num_devices["weather"] = len(wea_list)
 
+
+def show_stats():
+    container_list = client.containers.list()
+    if len(container_list) == 0: print("There are no running containers.")
+    else:
+        for container in container_list:
+            print(container.short_id, end='\t')
+            print(container.name, end='\t')
+            print(container.stats, end='\t')
+            print("-",end='\t\t')
+
+
+
 if __name__ == '__main__':
     # instantiate a client to talk with Docker daemon.
     usage()
@@ -177,4 +191,10 @@ if __name__ == '__main__':
             print("All stopped containers removed.")
             print("")
             input("Press ENTER to continue...")
-        elif op == 6: pass
+        elif op == 6:
+            subprocess.run(["clear"], shell=True)
+            show_stats(client)
+            print("")
+            input("Press ENTER to continue...")
+
+        elif op == 7: pass

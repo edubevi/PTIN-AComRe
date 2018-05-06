@@ -92,6 +92,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegDoc())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID)
 
         if interval is None:
@@ -111,6 +112,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegPac())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID)
 
         if interval is None:
@@ -127,6 +129,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegAmb())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
         device.setId(deviceID)
 
         if interval is None:
@@ -143,6 +146,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegSmoke())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID)
 
         if interval is None:
@@ -159,6 +163,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegWheather())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID)
 
         if interval is None:
