@@ -56,7 +56,7 @@ class Ambulance(Vehicle):
 
     def __init__(self):
         super(Ambulance, self).__init__()
-        self.__fuel = 100
+        self.__fuel = None
         self.__t_pressure = None
         self.__availability = 1
         self.__type = 3

@@ -34,9 +34,3 @@ def spawn_position(building=random.choice(['A', 'B', 'Neapolis'])):
         internal_lat = random.uniform(41.223760, 41.222952)
         internal_long = random.uniform(1.734363, 1.732982)
     return internal_lat, internal_long
-
-
-def jsonfy_data(id, type, name):
-    return {'id': id,
-            'type': type,
-            'name': name}

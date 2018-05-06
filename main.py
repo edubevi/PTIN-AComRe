@@ -28,18 +28,17 @@ def stay_alive(dev, interval=10):
             dev.setLongitude(y)
         dev.setTemp(body_thermometer(dev.getTemp()))
         dev.setHeart_rate(heart_rate_monitor(dev.getHeart_rate()))
-        dev.setBlood_pressure(blood_pressure_monitor())
+        dev.setBlood_pressure(blood_pressure_monitor(dev.getBlood_pressure()[0],dev.getBlood_pressure()[1]))
 
         data = dev.jsonPac()
         print(data)
         updateDevice(dev.getPersonalid(), data)
 
     elif type == 3:
-        f = dev.getFuelAmount()
-        x,y,f,d = gps(dev.getRoute())
+        x,y,_,d = gps(dev.getRoute())
         dev.setLatitude(x)
         dev.setLongitude(y)
-        dev.setFuelAmount(gas_tank(f, d))
+        dev.setFuelAmount(gas_tank(d))
         dev.setTirePressure(tyre_pressure_alarm())
 
         data = dev.jsonAmb()
@@ -92,7 +91,6 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegDoc())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
-        print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID)
 
         if interval is None:
@@ -106,13 +104,12 @@ if __name__ == '__main__':
         x, y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
-        device.setTemp(body_thermometer())
-        device.setHeart_rate(heart_rate_monitor())
-        device.setBlood_pressure(blood_pressure_monitor())
+        device.setTemp(body_thermometer(device.getTemp()))
+        device.setHeart_rate(heart_rate_monitor(device.getHeart_rate()))
+        device.setBlood_pressure(blood_pressure_monitor(device.getBlood_pressure()[0], device.getBlood_pressure()[1]))
 
         deviceID = createDevice(device.jsonRegPac())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
-        print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID)
 
         if interval is None:
@@ -129,7 +126,6 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegAmb())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID))
-        print(jsonfy_data(deviceID, type, device.getName()))
         device.setId(deviceID)
 
         if interval is None:
@@ -143,10 +139,8 @@ if __name__ == '__main__':
         x,y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
-
         deviceID = createDevice(device.jsonRegSmoke())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
-        print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID)
 
         if interval is None:
@@ -163,7 +157,6 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegWheather())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
-        print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID)
 
         if interval is None:

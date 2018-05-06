@@ -6,64 +6,88 @@ from pathlib import Path
 
 # Patient sensors
 
-def body_thermometer(prev_temp=36.0):
+def body_thermometer(prev_temp):
     max_temp = 43.0
     min_temp = 34.0
-    temp = ((random.random() * (max_temp - min_temp)) + min_temp)
-    diff = abs(prev_temp - temp)
-    if diff > 1:
-        diff = random.random() * 1
-    if temp > prev_temp:
-        final_temp = prev_temp + diff
-    else:
-        final_temp = prev_temp - diff
-    return round(final_temp, 1)
+    options = [1,2,3] # Opcions de variacio temperatura. 1-> incrementa, 2-> disminueix, 3-> es queda igual.
+    amounts = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0] # Quantiats amb les que pot variar la temperatura
 
+    # Agafem l'opcio de variacio de la temperatura en funcio d'un %. (incrementa->40%, disminueix->40%, igual->20%)
+    op = numpy.random.choice(options, p=[0.4,0.4,0.2])
+    # Agafem la quantitat que variara la temperatura en funcio d'un %.
+    amo = numpy.random.choice(amounts, p=[0.35,0.35,0.15,0.05,0.02,0.02,0.02,0.02,0.01,0.01])
 
-def heart_rate_monitor(prev_hr=50):
+    if op == 1:  #Augmenta temperatura.
+        new_temp = amo + prev_temp
+        # Comprovem si el nou valor esta fora del rang del sensor.
+        if new_temp > max_temp: new_temp = max_temp
+    elif op == 2: #Disminueix temperatura.
+        new_temp = prev_temp - amo
+        # Comprovem si el nou valor esta fora del rang del sensor.
+        if new_temp < min_temp: new_temp = min_temp
+    elif op == 3: new_temp = prev_temp #La temperautra es mante.
+
+    return round(new_temp,2)
+
+def heart_rate_monitor(prev_hr):
     max_hr = 190
     min_hr = 40
-    hr = random.uniform(max_hr, min_hr)
-    diff = abs(prev_hr - hr)
-    if diff > 10:
-        diff = random.random() * 10
-    if hr > prev_hr:
-        final_hr = prev_hr + diff
-    else:
-        final_hr = prev_hr - diff
-    return int(round(final_hr, 0))
+    options = [1,2,3]  # Opcions de variacio ritme cardiac. 1-> incrementa, 2-> disminueix, 3-> es queda igual.
+    amount = [2,4,6,8,10,15,20,25] # Possibles quantiats en les que pot variar el ritme cardiac.
+
+    # Agafem l'opcio de variacio del ritme cardiac en funcio d'un %. (incrementa->25%, disminueix->25%, es mante->50%)
+    op = numpy.random.choice(options, p=[0.25,0.25,0.5])
+    # Agafem la quantitat que variara el ritme cardiac en funcio d'un %.
+    amo = numpy.random.choice(amount, p=[0.2,0.2,0.15,0.15,0.1,0.1,0.05,0.05])
+
+    if op == 1:  # Augmenta_ritme cardiac.
+        new_hrate = amo + prev_hr
+        # Comprovem si el nou valor esta fora del rang del sensor.
+        if new_hrate > max_hr: new_temp = max_hr
+    elif op == 2: #Disminueix ritme cardiac.
+        new_hrate = prev_hr - amo
+        # Comprovem si el nou valor esta fora del rang del sensor.
+        if new_hrate < min_hr: new_hrate = min_hr
+    elif op == 3: # El ritme cardiac es mante.
+        new_hrate = prev_hr
+
+    return new_hrate
 
 
-def blood_pressure_monitor(prev_sys=100, prev_dia=70):
-    max_sys_pr = 160
-    min_sys_pr = 80
-    max_dia_pr = 100
-    min_dia_pr = 50
-    sys_pr = random.uniform(max_sys_pr, min_sys_pr)
-    dia_pr = random.uniform(max_dia_pr, min_dia_pr)
-    sys_diff = abs(prev_sys - sys_pr)
-    dia_diff = abs(prev_dia - dia_pr)
-    if sys_diff > 10:
-        sys_diff = random.random() * 10
-    if dia_diff > 10:
-        dia_diff = random.random() * 10
+def blood_pressure_monitor(prev_sys, prev_dia):
+    max_sys = 180
+    min_sys = 70
+    max_dia = 100
+    min_dia = 40
 
-    if sys_pr > prev_sys:
-        final_sys_pr = prev_sys + sys_diff
-    else:
-        final_sys_pr = prev_sys - sys_diff
+    options = [1, 2, 3]  # Opcions de variacio presio. 1-> incrementa, 2-> disminueix, 3-> es queda igual.
+    amount_sys = [2, 4, 6, 8, 10, 20, 30, 40] # Possibles quantiats en les que pot variar sys.
+    amount_dia = [2, 4, 6, 8, 10, 15, 20, 25] # Possibles quantiats en les que pot variar dia.
 
-    if dia_pr > prev_sys:
-        final_dia_pr = prev_dia + dia_diff
-    else:
-        final_dia_pr = prev_dia - dia_diff
+    op = numpy.random.choice(options, p=[0.25, 0.25, 0.5])
+    amo_sys = numpy.random.choice(amount_sys, p=[0.25, 0.25, 0.15, 0.15, 0.1, 0.06, 0.02, 0.02])
+    amo_dia = numpy.random.choice(amount_dia, p=[0.25, 0.25, 0.15, 0.15, 0.1, 0.05, 0.03, 0.02])
 
-    final_pr = int(round(final_sys_pr, 0)), int(round(final_dia_pr, 0))
-    return final_pr
+    if op == 1: # Augment de la presio arterial
+        new_sys = prev_sys + amo_sys
+        new_dia = prev_dia + amo_dia
+        # Comprovem si el nou valor esta fora del rang del sensor.
+        if new_sys > max_sys: new_sys = max_sys
+        if new_dia > max_dia: new_dia = max_dia
+    elif op == 2: # Disminueix la presio arterial
+        new_sys = prev_sys - amo_sys
+        new_dia = prev_dia - amo_dia
+        # Comprovem si el nou valor esta fora del rang del sensor.
+        if new_sys < min_sys: new_sys = min_sys
+        if new_dia < min_dia: new_dia = min_dia
+    elif op == 3: # No varia la presio arterial
+        new_sys = prev_sys
+        new_dia = prev_dia
+
+    return new_sys, new_dia
+
 
 # Location sensors
-
-
 def gps(route, next_jump = 0, distance=0):
     folder = Path('libs/routes/')
     filename = 'route_'+str(route)
