@@ -48,11 +48,11 @@ class Smoke_detector(Static_Device):
     def __init__(self):
         super(Smoke_detector, self).__init__()
         self.__status = 0
-        self.__type = 4
+        self.__type = 3
 
     # Getters
     def getType(self):
-        return self.__type
+        return int(self.__type)
 
     def getStatus(self):
         if self.__status == 0:
@@ -105,7 +105,7 @@ class WeatherStation(Static_Device):
         self.__air = a
 
     def getType(self):
-        return self.__type
+        return int(self.__type)
 
     def get_info(self):
         print("Weather station:")

@@ -57,11 +57,11 @@ class Patient(Person):
        self.__heart_rate = 90.0
        self.__b_pressure = 60.0
        self.__doc_proximity = 0
-       self.__type = 2
+       self.__type = 4
 
     # Getters
     def getType(self):
-        return self.__type
+        return int(self.__type)
 
     def getRoom(self):
         return self.__name
@@ -134,7 +134,7 @@ class Doctor(Person):
 
     # Getters
     def getType(self):
-        return self.__type
+        return int(self.__type)
 
     def getDoc_id(self):
         return self.__doc_id
