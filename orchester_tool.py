@@ -7,6 +7,7 @@ devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5}
 #stores the number of devices by type.
 num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0}
 
+
 def usage():
     p1 = subprocess.Popen(['dpkg','--get-selections'], stdout=subprocess.PIPE)
     p2 = subprocess.Popen(['grep','docker-ce[[:space:]]*install$'],stdin=p1.stdout,stdout=subprocess.PIPE)
@@ -15,6 +16,7 @@ def usage():
     if output[0] != '1':
         print("Docker is not installed. Please install it")
         sys.exit()
+
 
 def menu():
     subprocess.run(["clear"], shell=True)
@@ -32,6 +34,7 @@ def menu():
     print("[7] Exit.")
     print("------------------------------------")
 
+
 def create_container(client, type, num):
     count = 0
     while count != num:
@@ -42,6 +45,7 @@ def create_container(client, type, num):
         num_devices[type]+=1
         count+=1
 
+
 def stop_all(client):
     container_list = client.containers.list()
     if len(container_list) == 0: print("There are no containers to stop.")
@@ -51,6 +55,7 @@ def stop_all(client):
             container.stop()
             print("+ Container with short_id=" + container.short_id + " has been stopped.")
         for key in num_devices.keys(): num_devices[key]=0 #updates the number of all devices to 0
+
 
 def stop_containers(client, num, type):
     # container_list = client.containers.list(filters={'name':'doctor_*'})
@@ -77,6 +82,7 @@ def stop_containers(client, num, type):
             num_devices[type] -= 1
             stopped_container += 1
 
+
 def list_running_containers(client):
     print("------------------------------------")
     print("List of running containers")
@@ -94,6 +100,7 @@ def list_running_containers(client):
             elif "weather" in container.name: print("weather",end='\t\t')
             else: print("-",end='\t\t')
             print(container.name)
+
 
 def init_num_devices(client):
     doc_list = client.containers.list(filters={'name': "doctor_*"})
@@ -120,7 +127,6 @@ def show_stats(client):
             print("-",end='\t\t')
 
 
-
 if __name__ == '__main__':
     # instantiate a client to talk with Docker daemon.
     usage()
@@ -128,7 +134,7 @@ if __name__ == '__main__':
     #Inicialitza el nombre de dispositius que hi ha en execució per tipus.
     init_num_devices(client)
     op = 0
-    while op != 6:
+    while op != 7:
         menu()
         try:
             op = int(input("Please select an option: "))
