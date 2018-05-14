@@ -28,7 +28,7 @@ def stay_alive(dev, interval=10):
             dev.setLongitude(y)
         dev.setTemp(body_thermometer(dev.getTemp()))
         dev.setHeart_rate(heart_rate_monitor(dev.getHeart_rate()))
-        dev.setBlood_pressure(blood_pressure_monitor())
+        dev.setBlood_pressure(blood_pressure_monitor(dev.getBlood_pressure()[0],dev.getBlood_pressure()[1]))
 
         data = dev.jsonPac()
         print(data)
@@ -106,9 +106,9 @@ if __name__ == '__main__':
         x, y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
-        device.setTemp(body_thermometer())
-        device.setHeart_rate(heart_rate_monitor())
-        device.setBlood_pressure(blood_pressure_monitor())
+        device.setTemp(body_thermometer(device.getTemp()))
+        device.setHeart_rate(heart_rate_monitor(device.getHeart_rate()))
+        device.setBlood_pressure(blood_pressure_monitor(device.getBlood_pressure()[0], device.getBlood_pressure()[1]))
 
         deviceID = createDevice(device.jsonRegPac())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
@@ -143,7 +143,6 @@ if __name__ == '__main__':
         x,y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
-
         deviceID = createDevice(device.jsonRegSmoke())
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
         print(jsonfy_data(deviceID, type, device.getName()))

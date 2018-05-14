@@ -1,3 +1,4 @@
+import numpy, random
 
 class Person:
 
@@ -52,10 +53,15 @@ class Person:
 class Patient(Person):
 
     def __init__(self, name):
+       temp_values = [35.0, 36.0, 37.0, 38.0, 39.0, 40.0]
+       hrate_values = [random.randint(40,60),(random.randint(60,100)),(random.randint(100,140)),random.randint(140,191)]
+       sys_values = [random.randint(70,90),random.randint(90,120),random.randint(120,140),random.randint(140,181)]
+       dia_values = [random.randint(40,60),random.randint(60,80),random.randint(80,90),random.randint(90,101)]
        super(Patient, self).__init__(name)
-       self.__temp = 38.0
-       self.__heart_rate = 90.0
-       self.__b_pressure = 60.0
+       self.__temp = numpy.random.choice(temp_values,p=[0.05,0.3,0.3,0.2,0.1,0.05])
+       self.__heart_rate = numpy.random.choice(hrate_values,p=[0.08,0.7,0.2,0.02])
+       self.__sys = numpy.random.choice(sys_values,p=[0.05,0.7,0.2,0.05])
+       self.__dia = numpy.random.choice(dia_values,p=[0.05,0.7,0.2,0.05])
        self.__doc_proximity = 0
        self.__type = 2
 
@@ -76,7 +82,7 @@ class Patient(Person):
         return self.__heart_rate
 
     def getBlood_pressure(self):
-        return self.__b_pressure
+        return self.__sys, self.__dia
 
     def getDoc_proximity(self):
         return "%.2f m" % self.__doc_proximity
@@ -107,8 +113,9 @@ class Patient(Person):
     def setHeart_rate(self, rate):
         self.__heart_rate = rate
 
-    def setBlood_pressure(self, pressure):
-        self.__b_pressure = pressure
+    def setBlood_pressure(self, b_pressure):
+        self.__sys = b_pressure[0]
+        self.__dia = b_pressure[1]
 
     def setDoc_proximity(self, prox):
         self.__doc_proximity = prox
