@@ -115,16 +115,20 @@ def init_num_devices(client):
     if len(wea_list) != 0: num_devices["weather"] = len(wea_list)
 
 
-def show_stats(client):
+def show_stats():
+    subprocess.call(['docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.Container}}" --no-stream'], shell=True)
+
+
+def show_container_stats(client):
     container_list = client.containers.list()
-    if len(container_list) == 0: print("There are no running containers.")
+    if len(container_list) == 0:
+        print("There are no running containers.")
     else:
         for container in container_list:
             print(container.short_id, end='\t')
             print(container.name, end='\t')
-            s = container.stats(stream=False)
-            print(json.dumps(s, indent=4), end='\t')
-            print("-",end='\t\t')
+            print(container.logs(), end='\t')
+            print("-", end='\t\t')
 
 
 if __name__ == '__main__':
@@ -134,11 +138,11 @@ if __name__ == '__main__':
     #Inicialitza el nombre de dispositius que hi ha en execució per tipus.
     init_num_devices(client)
     op = 0
-    while op != 7:
+    while op != 8:
         menu()
         try:
             op = int(input("Please select an option: "))
-            if op < 0 or op > 6:
+            if op < 0 or op > 8:
                 raise ValueError
         except (ValueError, TypeError):
             print("ERROR: Invalid option.")
@@ -200,8 +204,13 @@ if __name__ == '__main__':
             input("Press ENTER to continue...")
         elif op == 6:
             subprocess.run(["clear"], shell=True)
-            show_stats(client)
+            show_stats()
+            print("")
+            input("Press ENTER to continue...")
+        elif op == 7:
+            subprocess.run(["clear"], shell=True)
+            show_container_stats(client)
             print("")
             input("Press ENTER to continue...")
 
-        elif op == 7: pass
+        elif op == 8: pass
