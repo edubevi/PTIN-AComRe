@@ -29,7 +29,7 @@ def menu():
     print("[3] Show running containers.")
     print("[4] Stop all running containers.")
     print("[5] Delete all stopped containers.")
-    print("[6] Show containers stats.")
+    print("[6] Show container stats.")
     print("")
     print("[7] Exit.")
     print("------------------------------------")
@@ -119,18 +119,6 @@ def show_stats():
     subprocess.call(['docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.Container}}" --no-stream'], shell=True)
 
 
-def show_container_stats(client):
-    container_list = client.containers.list()
-    if len(container_list) == 0:
-        print("There are no running containers.")
-    else:
-        for container in container_list:
-            print(container.short_id, end='\t')
-            print(container.name, end='\t')
-            print(container.logs(), end='\t')
-            print("-", end='\t\t')
-
-
 if __name__ == '__main__':
     # instantiate a client to talk with Docker daemon.
     usage()
@@ -138,11 +126,11 @@ if __name__ == '__main__':
     #Inicialitza el nombre de dispositius que hi ha en execució per tipus.
     init_num_devices(client)
     op = 0
-    while op != 8:
+    while op != 7:
         menu()
         try:
             op = int(input("Please select an option: "))
-            if op < 0 or op > 8:
+            if op < 0 or op > 7:
                 raise ValueError
         except (ValueError, TypeError):
             print("ERROR: Invalid option.")
@@ -207,10 +195,6 @@ if __name__ == '__main__':
             show_stats()
             print("")
             input("Press ENTER to continue...")
-        elif op == 7:
-            subprocess.run(["clear"], shell=True)
-            show_container_stats(client)
-            print("")
-            input("Press ENTER to continue...")
 
-        elif op == 8: pass
+        elif op == 7:
+            pass
