@@ -119,6 +119,25 @@ def show_stats():
     subprocess.call(['docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.Container}}" --no-stream'], shell=True)
 
 
+def show_types():
+    print("------------------------------------")
+    print("Devices per type")
+    print("------------------------------------")
+    container_list = client.containers.list()
+    if len(container_list) == 0:
+        print("There are no running containers.")
+    else:
+        if num_devices["doctor"] != 0:
+            print('Doctors: ', num_devices["doctor"], end='\t')
+        if num_devices["patient"] != 0:
+            print('Patients: ', num_devices["patient"], end='\t')
+        if num_devices["ambulance"] != 0:
+            print('Ambulances: ', num_devices["ambulance"], end='\t')
+        if num_devices["smoke"] != 0:
+            print('Smoke: ', num_devices["smoke"], end='\t')
+        if num_devices["weather"] != 0:
+            print('Weather: ', num_devices["weather"], end='\t')
+
 if __name__ == '__main__':
     # instantiate a client to talk with Docker daemon.
     usage()
