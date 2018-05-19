@@ -18,7 +18,6 @@ def stay_alive(dev, interval=10):
             dev.setLatitude(x)
             dev.setLongitude(y)
         data = dev.jsonDoc()
-        print(dev.getPersonalid())
         print(data)
         updateDevice(dev.getPersonalid(), data)
 
@@ -32,7 +31,6 @@ def stay_alive(dev, interval=10):
         dev.setBlood_pressure(blood_pressure_monitor(dev.getBlood_pressure()[0],dev.getBlood_pressure()[1]))
 
         data = dev.jsonPac()
-        print(dev.getPersonalid())
         print(data)
         updateDevice(dev.getPersonalid(), data)
 
@@ -45,14 +43,12 @@ def stay_alive(dev, interval=10):
         dev.setTirePressure(tyre_pressure_alarm())
 
         data = dev.jsonAmb()
-        print(dev.getPersonalid())
         print(data)
         updateDevice(dev.getId(), data)
 
     elif type == 4:
         dev.setStatus(smoke_detector())
         data = dev.jsonSmoke()
-        print(dev.getPersonalid())
         print(data)
         updateDevice(dev.getIdDev(), data)
 
@@ -61,9 +57,14 @@ def stay_alive(dev, interval=10):
         dev.set_humidity(hygrometer())
         dev.set_air_pressure(barometer())
         data = dev.jsonWeather()
-        print(dev.getPersonalid())
         print(data)
         updateDevice(dev.getIdDev(), data)
+
+    elif type == 6:
+        data = dev.jsonAir()
+        print(data)
+        updateDevice(dev.getIdDev(), data)
+
 
 def usage():
     print("usage: main.py -t <device_type> -i <time_interval>")
@@ -96,6 +97,7 @@ if __name__ == '__main__':
         device.setMovement(random.randint(0, 1))
 
         deviceID = createDevice(device.jsonRegDoc())
+        print(deviceID)
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID)
@@ -116,6 +118,7 @@ if __name__ == '__main__':
         device.setBlood_pressure(blood_pressure_monitor(device.getBlood_pressure()[0], device.getBlood_pressure()[1]))
 
         deviceID = createDevice(device.jsonRegPac())
+        print(deviceID)
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID)
@@ -133,6 +136,7 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegAmb())
+        print(deviceID)
         print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setId(deviceID)
@@ -149,6 +153,7 @@ if __name__ == '__main__':
         device.setLatitude(x)
         device.setLongitude(y)
         deviceID = createDevice(device.jsonRegSmoke())
+        print(deviceID)
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID)
@@ -166,6 +171,7 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegWheather())
+        print(deviceID)
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID)
@@ -173,6 +179,25 @@ if __name__ == '__main__':
         if interval is None:
             interval = 900
         stay_alive(device, interval) # 900 seconds = 15 min to limit api calls
+
+    elif type == 6:
+        device = AirQuality()
+        building = random.choice(['A', 'B', 'Neapolis'])
+        device.setBuilding(building)
+        x,y = spawn_position(building)
+        device.setLatitude(x)
+        device.setLongitude(y)
+
+        deviceID = createDevice(device.jsonRegAir())
+        print(deviceID)
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(jsonfy_data(deviceID, type, device.getName()))
+        device.setIdDev(deviceID)
+
+        if interval is None:
+            interval = 300
+        stay_alive(device, interval)
+        # 300 seconds = 5 min
 
     else:   # default, no type defined
         usage()

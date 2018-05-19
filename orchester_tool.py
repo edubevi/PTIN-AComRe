@@ -2,10 +2,10 @@
 
 import time, docker, subprocess, sys, json
 
-#List of allowed devices with their type id.
-devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5}
-#stores the number of devices by type.
-num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0}
+# List of allowed devices with their type id.
+devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5,"air":6}
+# stores the number of devices by type.
+num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0,"air":0}
 
 
 def usage():
@@ -44,8 +44,8 @@ def create_container(client, type, num):
         c_type = "-t "+str(devices[type])
         container = client.containers.run("peremontpeo/virtualdevices:latest",c_type, detach=True, name=c_name, auto_remove=True)
         print("+ Container with short_id=" + container.short_id + " has been created.")
-        num_devices[type]+=1
-        count+=1
+        num_devices[type] += 1
+        count += 1
 
 
 def stop_all(client):
@@ -100,6 +100,7 @@ def list_running_containers(client):
             elif "ambulance" in container.name: print("ambulance",end='\t\t')
             elif "smoke" in container.name: print("smoke",end='\t\t')
             elif "weather" in container.name: print("weather",end='\t\t')
+            elif "air" in container.name: print("airq",end='\t\t')
             else: print("-",end='\t\t')
             print(container.name)
 
@@ -115,6 +116,8 @@ def init_num_devices(client):
     if len(smo_list) != 0: num_devices["smoke"] = len(smo_list)
     wea_list = client.containers.list(filters={'name': "weather_*"})
     if len(wea_list) != 0: num_devices["weather"] = len(wea_list)
+    air_list = client.containers.list(filters={'name': "air_*"})
+    if len(wea_list) != 0: num_devices["air"] = len(air_list)
 
 
 def show_stats():
@@ -139,6 +142,8 @@ def show_types(client):
             print('Smoke:', num_devices["smoke"], end='\t')
         if num_devices["weather"] != 0:
             print('Weather:', num_devices["weather"], end='\t')
+        if num_devices["air"] != 0:
+            print('Air quality:', num_devices["air"], end='\t')
 
 
 def button_push(client):
