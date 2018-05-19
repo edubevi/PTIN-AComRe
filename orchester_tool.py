@@ -154,7 +154,7 @@ def button_push(client):
     else:
         print("NUM\tSHORT_ID\t\tNAME")
         for container in container_list:
-            if "doctor" in container.name:
+            if "patient" in container.name:
                 print(i, end='\t')
                 print(container.short_id, end='\t\t')
                 print(container.name)
