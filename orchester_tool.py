@@ -171,7 +171,8 @@ def button_push(client):
                 print("ERROR: Invalid option.")
                 time.sleep(1)
 
-            selected = client.containers.get(patient_list[op])
+            #selected = client.containers.get(patient_list[op])
+            selected = patient_list[op]
             try:
                 print(selected.logs(tail=1))
             except docker.errors.APIError:
