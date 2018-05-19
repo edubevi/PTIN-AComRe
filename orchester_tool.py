@@ -162,7 +162,7 @@ def button_push(client):
                 i += 1
 
         print("")
-        while op != i+1:
+        while 0 < op < i+1:
             try:
                 op = int(input("Please select a container: "))
                 if op < 0 or op > i+1:
@@ -171,19 +171,25 @@ def button_push(client):
                 print("ERROR: Invalid option.")
                 time.sleep(1)
 
-            #selected = client.containers.get(patient_list[op])
+            # selected = client.containers.get(patient_list[op])
             selected = patient_list[op]
             try:
-                print(selected.logs(tail=1))
+                #print(selected.logs(tail=1))
+                get_device_id(selected)
             except docker.errors.APIError:
                 pass
+
+
+def get_device_id(k):
+    decoded = json.loads(k.logs(tail=1))
+    print(decoded['id'])
 
 
 if __name__ == '__main__':
     # instantiate a client to talk with Docker daemon.
     usage()
     client = docker.from_env()
-    #Inicialitza el nombre de dispositius que hi ha en execució per tipus.
+    # Inicialitza el nombre de dispositius que hi ha en execució per tipus.
     init_num_devices(client)
     op = 0
     nop = 9
