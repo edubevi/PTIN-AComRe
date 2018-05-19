@@ -130,15 +130,15 @@ def show_types(client):
         print("There are no running containers.")
     else:
         if num_devices["doctor"] != 0:
-            print('Doctors: ', num_devices["doctor"], end='\t')
+            print('Doctors:', num_devices["doctor"], end='\t')
         if num_devices["patient"] != 0:
-            print('Patients: ', num_devices["patient"], end='\t')
+            print('Patients:', num_devices["patient"], end='\t')
         if num_devices["ambulance"] != 0:
-            print('Ambulances: ', num_devices["ambulance"], end='\t')
+            print('Ambulances:', num_devices["ambulance"], end='\t')
         if num_devices["smoke"] != 0:
-            print('Smoke: ', num_devices["smoke"], end='\t')
+            print('Smoke:', num_devices["smoke"], end='\t')
         if num_devices["weather"] != 0:
-            print('Weather: ', num_devices["weather"], end='\t')
+            print('Weather:', num_devices["weather"], end='\t')
 
 
 def button_push(client):
@@ -162,7 +162,7 @@ def button_push(client):
                 i += 1
 
         print("")
-        while 0 < op < i+1:
+        while -1 < op < i+1:
             try:
                 op = int(input("Please select a container: "))
                 if op < 0 or op > i+1:
