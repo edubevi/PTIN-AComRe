@@ -30,6 +30,7 @@ def menu():
     print("[4] Stop all running containers.")
     print("[5] Delete all stopped containers.")
     print("[6] Show container stats.")
+    print("[7] Show devices per type.")
     print("")
     print("[7] Exit.")
     print("------------------------------------")
@@ -119,7 +120,7 @@ def show_stats():
     subprocess.call(['docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.Container}}" --no-stream'], shell=True)
 
 
-def show_types():
+def show_types(client):
     print("------------------------------------")
     print("Devices per type")
     print("------------------------------------")
@@ -138,6 +139,47 @@ def show_types():
         if num_devices["weather"] != 0:
             print('Weather: ', num_devices["weather"], end='\t')
 
+
+def button_push():
+    print("------------------------------------")
+    print("Select a patient")
+    print("------------------------------------")
+    container_list = client.containers.list()
+    i = 0
+    op = 0
+    patient_list = list()
+    if num_devices["patient"] == 0:
+        print("There are no running containers.")
+    else:
+        print("NUM\tSHORT_ID\t\tNAME")
+        for container in container_list:
+            if "doctor" in container.name:
+                print(i, end='\t')
+                print(container.short_id, end='\t\t')
+                print(container.name)
+                patient_list[i]=container.short_id
+                i += 1
+
+        print("")
+        while op != i+1:
+            try:
+                op = int(input("Please select a container: "))
+                if op < 0 or op > i+1:
+                    raise ValueError
+            except (ValueError, TypeError):
+                print("ERROR: Invalid option.")
+                time.sleep(1)
+
+            selected = client.containers.get(patient_list[op])
+            try:
+                selected.exec_run('')
+            except docker.errors.APIError:
+                pass
+
+
+
+
+
 if __name__ == '__main__':
     # instantiate a client to talk with Docker daemon.
     usage()
@@ -145,11 +187,11 @@ if __name__ == '__main__':
     #Inicialitza el nombre de dispositius que hi ha en execució per tipus.
     init_num_devices(client)
     op = 0
-    while op != 7:
+    while op != 8:
         menu()
         try:
             op = int(input("Please select an option: "))
-            if op < 0 or op > 7:
+            if op < 0 or op > 8:
                 raise ValueError
         except (ValueError, TypeError):
             print("ERROR: Invalid option.")
@@ -214,6 +256,11 @@ if __name__ == '__main__':
             show_stats()
             print("")
             input("Press ENTER to continue...")
-
         elif op == 7:
+            subprocess.run(["clear"], shell=True)
+            show_types(client)
+            print("")
+            input("Press ENTER to continue...")
+
+        elif op == 8:
             pass
