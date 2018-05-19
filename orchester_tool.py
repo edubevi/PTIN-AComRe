@@ -146,7 +146,7 @@ def button_push(client):
     print("Select a patient")
     print("------------------------------------")
     container_list = client.containers.list()
-    i = 1
+    i = 0
     op = 0
     patient_list = list()
     if num_devices["patient"] == 0:
@@ -158,7 +158,7 @@ def button_push(client):
                 print(i, end='\t')
                 print(container.short_id, end='\t\t')
                 print(container.name)
-                patient_list[i] = container.short_id
+                patient_list[i].append(container)
                 i += 1
 
         print("")
