@@ -181,9 +181,13 @@ def button_push(client):
 
 
 def get_device_id(k):
-    data = json.dumps(dict(k.logs(tail=1)))
-    decoded = json.loads(data)
-    print(decoded['id'])
+    # Decode bytes to Unicode, convert single quotes
+    json_data = k.logs(tail=1).decode('utf8').replace("'", '"')
+
+    # Load JSON to Python list and dump it back as formatted JSON
+    d = json.loads(json_data)
+    data = json.dumps(d, indent=4, sort_keys=True)
+    print(data['id'])
 
 
 if __name__ == '__main__':
