@@ -181,8 +181,8 @@ def button_push(client):
 
 
 def get_device_id(k):
-    data = json.dumps(k.logs(tail=1))
-    decoded = json.loads(str(data))
+    data = json.dumps(dict(k.logs(tail=1)))
+    decoded = json.loads(data)
     print(decoded['id'])
 
 
