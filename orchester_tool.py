@@ -182,8 +182,9 @@ def button_push(client):
 
 def get_device_id(k):
     # Decode bytes to Unicode
-    data = k.logs(tail=1).decode('utf8')
-    print(data['id'])
+    data = k.logs().decode('utf8')
+    data = data.splitlines()[0]
+    print(data)
 
 
 if __name__ == '__main__':
