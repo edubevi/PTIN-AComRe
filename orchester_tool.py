@@ -172,12 +172,9 @@ def button_push():
 
             selected = client.containers.get(patient_list[op])
             try:
-                selected.exec_run('')
+                print(selected.logs(tail=1))
             except docker.errors.APIError:
                 pass
-
-
-
 
 
 if __name__ == '__main__':
