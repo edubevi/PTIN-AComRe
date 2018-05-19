@@ -31,8 +31,9 @@ def menu():
     print("[5] Delete all stopped containers.")
     print("[6] Show container stats.")
     print("[7] Show devices per type.")
+    print("[8] Push emergency button.")
     print("")
-    print("[7] Exit.")
+    print("[9] Exit.")
     print("------------------------------------")
 
 
@@ -140,7 +141,7 @@ def show_types(client):
             print('Weather: ', num_devices["weather"], end='\t')
 
 
-def button_push():
+def button_push(client):
     print("------------------------------------")
     print("Select a patient")
     print("------------------------------------")
@@ -184,11 +185,12 @@ if __name__ == '__main__':
     #Inicialitza el nombre de dispositius que hi ha en execució per tipus.
     init_num_devices(client)
     op = 0
-    while op != 8:
+    nop = 9
+    while op != nop:
         menu()
         try:
             op = int(input("Please select an option: "))
-            if op < 0 or op > 8:
+            if op < 0 or op > nop:
                 raise ValueError
         except (ValueError, TypeError):
             print("ERROR: Invalid option.")
@@ -258,6 +260,11 @@ if __name__ == '__main__':
             show_types(client)
             print("")
             input("Press ENTER to continue...")
-
         elif op == 8:
+            subprocess.run(["clear"], shell=True)
+            button_push(client)
+            print("")
+            input("Press ENTER to continue...")
+
+        elif op == nop:
             pass
