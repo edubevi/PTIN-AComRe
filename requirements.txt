@@ -3,3 +3,4 @@ numpy
 python-forecastio
 docker
 Faker
+socketIO

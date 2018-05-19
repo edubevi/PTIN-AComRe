@@ -5,11 +5,11 @@ from libs.sensors import *
 from libs.helper import *
 from faker import Faker
 from libs.send import *
+from libs.sockets import *
 import sys
 import threading
 import getopt
-
-
+'''
 def stay_alive(dev, interval=10):
     threading.Timer(interval, stay_alive, [dev], {}).start()
     if type == 1:
@@ -166,3 +166,6 @@ if __name__ == '__main__':
 
     else:   # default, no type defined
         usage()
+'''
+
+
