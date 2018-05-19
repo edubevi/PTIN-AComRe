@@ -181,12 +181,8 @@ def button_push(client):
 
 
 def get_device_id(k):
-    # Decode bytes to Unicode, convert single quotes
-    json_data = k.logs(tail=1).decode('utf8').replace("'", '"')
-
-    # Load JSON to Python list and dump it back as formatted JSON
-    d = json.loads(json_data)
-    data = json.dumps(d, indent=4, sort_keys=True)
+    # Decode bytes to Unicode
+    data = k.logs(tail=1).decode('utf8')
     print(data['id'])
 
 
