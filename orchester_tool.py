@@ -158,7 +158,7 @@ def button_push(client):
                 print(i, end='\t')
                 print(container.short_id, end='\t\t')
                 print(container.name)
-                patient_list[i].append(container)
+                patient_list.append(container)
                 i += 1
 
         print("")
