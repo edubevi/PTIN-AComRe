@@ -10,6 +10,7 @@ class Person:
         self.__lon = None
         self.__building = None
         self.__movement = None
+        self.__token = None
 
     # Getters
     def getName(self):
@@ -30,6 +31,9 @@ class Person:
     def getMovement(self):
         return self.__movement
 
+    def getToken(self):
+        return self.__token
+
     # Setters
     def setName(self, name):
         self.__name = name
@@ -48,6 +52,9 @@ class Person:
 
     def setMovement(self, m):
         self.__movement = m
+
+    def setToken(self, t):
+        self.__token = t
 
 class Patient(Person):
 

@@ -9,7 +9,7 @@ from libs.sockets import *
 import sys
 import threading
 import getopt
-'''
+
 def stay_alive(dev, interval=10):
     threading.Timer(interval, stay_alive, [dev], {}).start()
     if type == 1:
@@ -19,7 +19,7 @@ def stay_alive(dev, interval=10):
             dev.setLongitude(y)
         data = dev.jsonDoc()
         print(data)
-        updateDevice(dev.getPersonalid(), data)
+        updateDevice(dev.getPersonalid(), data, dev.getToken())
 
     elif type == 2:
         if dev.getMovement() is 1:
@@ -32,7 +32,7 @@ def stay_alive(dev, interval=10):
 
         data = dev.jsonPac()
         print(data)
-        updateDevice(dev.getPersonalid(), data)
+        updateDevice(dev.getPersonalid(), data, dev.getToken())
 
     elif type == 3:
         x,y,_,d = gps(dev.getRoute())
@@ -43,13 +43,13 @@ def stay_alive(dev, interval=10):
 
         data = dev.jsonAmb()
         print(data)
-        updateDevice(dev.getId(), data)
+        updateDevice(dev.getId(), data, dev.getToken())
 
     elif type == 4:
         dev.setStatus(smoke_detector())
         data = dev.jsonSmoke()
         print(data)
-        updateDevice(dev.getIdDev(), data)
+        updateDevice(dev.getIdDev(), data, dev.getToken())
 
     elif type == 5:
         dev.set_temperature(thermometer())
@@ -57,7 +57,7 @@ def stay_alive(dev, interval=10):
         dev.set_air_pressure(barometer())
         data = dev.jsonWeather()
         print(data)
-        updateDevice(dev.getIdDev(), data)
+        updateDevice(dev.getIdDev(), data, dev.getToken())
 
 def usage():
     print("usage: main.py -t <device_type> -i <time_interval>")
@@ -90,8 +90,9 @@ if __name__ == '__main__':
         device.setMovement(random.randint(0, 1))
 
         deviceID = createDevice(device.jsonRegDoc())
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
-        device.setPersonalid(deviceID)
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
+        device.setPersonalid(deviceID[0])
+        device.setToken(deviceID[1])
 
         if interval is None:
             interval = 10
@@ -109,8 +110,9 @@ if __name__ == '__main__':
         device.setBlood_pressure(blood_pressure_monitor())
 
         deviceID = createDevice(device.jsonRegPac())
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
-        device.setPersonalid(deviceID)
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
+        device.setPersonalid(deviceID[0])
+        device.setToken(deviceID[1])
 
         if interval is None:
             interval = 10
@@ -125,8 +127,9 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegAmb())
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID))
-        device.setId(deviceID)
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID[0]))
+        device.setId(deviceID[0])
+        device.setToken(deviceID[1])
 
         if interval is None:
             interval = 5
@@ -141,8 +144,9 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegSmoke())
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
-        device.setIdDev(deviceID)
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
+        device.setIdDev(deviceID[0])
+        device.setToken(deviceID[1])
 
         if interval is None:
             interval = 10
@@ -157,8 +161,9 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegWheather())
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
-        device.setIdDev(deviceID)
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
+        device.setIdDev(deviceID[0])
+        device.setToken(deviceID[1])
 
         if interval is None:
             interval = 900
@@ -166,6 +171,6 @@ if __name__ == '__main__':
 
     else:   # default, no type defined
         usage()
-'''
+
 
 
