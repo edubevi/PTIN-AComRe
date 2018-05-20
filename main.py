@@ -219,10 +219,11 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegAir())
-        print(deviceID)
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(deviceID[0])
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
-        device.setIdDev(deviceID)
+        device.setIdDev(deviceID[0])
+        device.setToken(deviceID[1])
 
         if interval is None:
             interval = 300
