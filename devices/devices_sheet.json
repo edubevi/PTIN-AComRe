@@ -29,8 +29,9 @@
       "online": true,
       "device": "doctor",
       "id": "",
+      "speciality": "",
       "latitude": "",
-      "longitude": "",
+      "longitude": ""
     }
   },
   "ambulance": {
