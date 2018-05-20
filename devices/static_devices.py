@@ -98,6 +98,11 @@ class AirQuality(Static_Device):
     def set_pm10(self, p):
         self.__pm10 = p
 
+    # Getters
+    def getType(self):
+        return self.__type
+
+
     def jsonRegAir(self):
         return {'name': self.getName(),
                 'type': self.getType()}
