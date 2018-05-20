@@ -11,6 +11,7 @@ class Static_Device:
         self.__building = None
         fake = Faker()
         self.__name = fake.mac_address()
+        self.__token = None
 
 
     # Getters
@@ -29,6 +30,10 @@ class Static_Device:
     def getName(self):
         return self.__name
 
+    def getToken(self):
+        return self.__token
+
+
     # Setters
     def setIdDev(self, idDev):
         self.__idDev = idDev
@@ -41,6 +46,9 @@ class Static_Device:
 
     def setBuilding(self, b):
         self.__building = b
+
+    def setToken(self, t):
+        self.__token = t
 
 
 class Smoke_detector(Static_Device):

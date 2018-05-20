@@ -142,7 +142,7 @@ class Patient(Person):
 
 class Doctor(Person):
     def __init__(self, name):
-        spec_list = ["GENERAL","CARDIOLOGIST"]
+        spec_list = ["GENERAL", "CARDIOLOGIST"]
         super(Doctor, self).__init__(name)
         self.__speciality = numpy.random.choice(spec_list,p=[0.5,0.5])
         self.__availability = 0

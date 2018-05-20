@@ -11,6 +11,7 @@ class Vehicle:
         self.__lon = None
         self.__plate = self.random_plate()
         self.__route = None
+        self.__token = None
 
     # Getters
     def getId(self):
@@ -28,6 +29,9 @@ class Vehicle:
     def getPlate(self):
         return self.__plate
 
+    def getToken(self):
+        return self.__token
+
     # Setters
     def setId(self, id):
         self.__v_id = id
@@ -40,6 +44,9 @@ class Vehicle:
 
     def setRoute(self, r):
         self.__route = r
+
+    def setToken(self, t):
+        self.__token = t
 
     def random_plate(self):
         plate = []
