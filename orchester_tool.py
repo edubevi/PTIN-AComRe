@@ -176,20 +176,19 @@ def button_push(client):
                 print("ERROR: Invalid option.")
                 time.sleep(1)
 
-            # selected = client.containers.get(patient_list[op])
-            selected = patient_list[op]
-            try:
-                #print(selected.logs(tail=1))
-                get_device_id(selected)
-            except docker.errors.APIError:
-                pass
+        selected = patient_list[op]
+        try:
+            get_device_id(selected)
+            selected.kill(signal='SIGUSR1')
+        except docker.errors.APIError:
+            pass
 
 
 def get_device_id(k):
     # Decode bytes to Unicode
     data = k.logs().decode('utf8')
     data = data.splitlines()[0]
-    print(data)
+    return data
 
 
 if __name__ == '__main__':

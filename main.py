@@ -5,13 +5,29 @@ from libs.sensors import *
 from libs.helper import *
 from faker import Faker
 from libs.send import *
+from libs.sockets import *
 import sys
 import threading
 import getopt
+import signal
 
 
-def stay_alive(dev, interval=10):
-    threading.Timer(interval, stay_alive, [dev], {}).start()
+def receive_signal(s, c):
+    print('¡Button pushed!')
+
+
+def receive_button(d):
+    while True:
+        print('waiting')
+        # signal.signal(signal.SIGUSR1, receive_signal)
+        signal.sigwait((signal.SIGUSR1,))
+        socketsend("GENERAL", d.getLatitude(), d.getLongitude(), d.getPersonalid())
+        print('socketsend')
+
+
+def stay_alive(dev, timer):
+    threading.Timer(timer, stay_alive, [dev, timer], {}).start()
+
     if type == 1:
         if dev.getMovement() is 1:
             x, y = ips_coordinates(dev.getBuilding())
@@ -28,7 +44,7 @@ def stay_alive(dev, interval=10):
             dev.setLongitude(y)
         dev.setTemp(body_thermometer(dev.getTemp()))
         dev.setHeart_rate(heart_rate_monitor(dev.getHeart_rate()))
-        dev.setBlood_pressure(blood_pressure_monitor(dev.getBlood_pressure()[0],dev.getBlood_pressure()[1]))
+        dev.setBlood_pressure(blood_pressure_monitor(dev.getBlood_pressure()[0], dev.getBlood_pressure()[1]))
 
         data = dev.jsonPac()
         print(data)
@@ -70,6 +86,7 @@ def usage():
     print("usage: main.py -t <device_type> -i <time_interval>")
     sys.exit(2)
 
+
 if __name__ == '__main__':
 
     #init
@@ -93,7 +110,7 @@ if __name__ == '__main__':
         x,y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
-        #0 no te moviment es static, 1 es mou
+        # 0 no te moviment es static, 1 es mou
         device.setMovement(random.randint(0, 1))
 
         deviceID = createDevice(device.jsonRegDoc())
@@ -125,7 +142,12 @@ if __name__ == '__main__':
 
         if interval is None:
             interval = 10
-        stay_alive(device, interval)
+        alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
+        alive.setDaemon(False)
+        alive.start()
+
+        # signal nomes pel main thread, passem stay_alive a un altre thread
+        receive_button(device)
 
     elif type == 3:
         device = Ambulance()
@@ -138,7 +160,7 @@ if __name__ == '__main__':
         deviceID = createDevice(device.jsonRegAmb())
         print(deviceID)
         print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID))
-        print(jsonfy_data(deviceID, type, device.getName()))
+        print(jsonfy_data(deviceID, type, device.getPlate()))
         device.setId(deviceID)
 
         if interval is None:
