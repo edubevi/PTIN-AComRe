@@ -2,10 +2,10 @@
 
 import time, docker, subprocess, sys, json
 
-#List of allowed devices with their type id.
-devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5}
-#stores the number of devices by type.
-num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0}
+# List of allowed devices with their type id.
+devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5,"air":6}
+# stores the number of devices by type.
+num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0,"air":0}
 
 
 def usage():
@@ -31,8 +31,9 @@ def menu():
     print("[5] Delete all stopped containers.")
     print("[6] Show container stats.")
     print("[7] Show devices per type.")
+    print("[8] Push emergency button.")
     print("")
-    print("[8] Exit.")
+    print("[9] Exit.")
     print("------------------------------------")
 
 
@@ -43,8 +44,8 @@ def create_container(client, type, num):
         c_type = "-t "+str(devices[type])
         container = client.containers.run("peremontpeo/virtualdevices:latest",c_type,"-i 10", detach=True, name=c_name, auto_remove=True)
         print("+ Container with short_id=" + container.short_id + " has been created.")
-        num_devices[type]+=1
-        count+=1
+        num_devices[type] += 1
+        count += 1
 
 
 def stop_all(client):
@@ -99,6 +100,7 @@ def list_running_containers(client):
             elif "ambulance" in container.name: print("ambulance",end='\t\t')
             elif "smoke" in container.name: print("smoke",end='\t\t')
             elif "weather" in container.name: print("weather",end='\t\t')
+            elif "air" in container.name: print("airq",end='\t\t')
             else: print("-",end='\t\t')
             print(container.name)
 
@@ -114,6 +116,8 @@ def init_num_devices(client):
     if len(smo_list) != 0: num_devices["smoke"] = len(smo_list)
     wea_list = client.containers.list(filters={'name': "weather_*"})
     if len(wea_list) != 0: num_devices["weather"] = len(wea_list)
+    air_list = client.containers.list(filters={'name': "air_*"})
+    if len(wea_list) != 0: num_devices["air"] = len(air_list)
 
 
 def show_stats():
@@ -129,18 +133,20 @@ def show_types(client):
         print("There are no running containers.")
     else:
         if num_devices["doctor"] != 0:
-            print('Doctors: ', num_devices["doctor"], end='\t')
+            print('Doctors:', num_devices["doctor"], end='\t')
         if num_devices["patient"] != 0:
-            print('Patients: ', num_devices["patient"], end='\t')
+            print('Patients:', num_devices["patient"], end='\t')
         if num_devices["ambulance"] != 0:
-            print('Ambulances: ', num_devices["ambulance"], end='\t')
+            print('Ambulances:', num_devices["ambulance"], end='\t')
         if num_devices["smoke"] != 0:
-            print('Smoke: ', num_devices["smoke"], end='\t')
+            print('Smoke:', num_devices["smoke"], end='\t')
         if num_devices["weather"] != 0:
-            print('Weather: ', num_devices["weather"], end='\t')
+            print('Weather:', num_devices["weather"], end='\t')
+        if num_devices["air"] != 0:
+            print('Air quality:', num_devices["air"], end='\t')
 
 
-def button_push():
+def button_push(client):
     print("------------------------------------")
     print("Select a patient")
     print("------------------------------------")
@@ -153,15 +159,15 @@ def button_push():
     else:
         print("NUM\tSHORT_ID\t\tNAME")
         for container in container_list:
-            if "doctor" in container.name:
+            if "patient" in container.name:
                 print(i, end='\t')
                 print(container.short_id, end='\t\t')
                 print(container.name)
-                patient_list[i]=container.short_id
+                patient_list.append(container)
                 i += 1
 
         print("")
-        while op != i+1:
+        while -1 < op < i+1:
             try:
                 op = int(input("Please select a container: "))
                 if op < 0 or op > i+1:
@@ -170,25 +176,34 @@ def button_push():
                 print("ERROR: Invalid option.")
                 time.sleep(1)
 
-            selected = client.containers.get(patient_list[op])
-            try:
-                print(selected.logs(tail=1))
-            except docker.errors.APIError:
-                pass
+        selected = patient_list[op]
+        try:
+            get_device_id(selected)
+            selected.kill(signal='SIGUSR1')
+        except docker.errors.APIError:
+            pass
+
+
+def get_device_id(k):
+    # Decode bytes to Unicode
+    data = k.logs().decode('utf8')
+    data = data.splitlines()[0]
+    return data
 
 
 if __name__ == '__main__':
     # instantiate a client to talk with Docker daemon.
     usage()
     client = docker.from_env()
-    #Inicialitza el nombre de dispositius que hi ha en execució per tipus.
+    # Inicialitza el nombre de dispositius que hi ha en execució per tipus.
     init_num_devices(client)
     op = 0
-    while op != 8:
+    nop = 9
+    while op != nop:
         menu()
         try:
             op = int(input("Please select an option: "))
-            if op < 0 or op > 8:
+            if op < 0 or op > nop:
                 raise ValueError
         except (ValueError, TypeError):
             print("ERROR: Invalid option.")
@@ -258,6 +273,11 @@ if __name__ == '__main__':
             show_types(client)
             print("")
             input("Press ENTER to continue...")
-
         elif op == 8:
+            subprocess.run(["clear"], shell=True)
+            button_push(client)
+            print("")
+            input("Press ENTER to continue...")
+
+        elif op == nop:
             pass
