@@ -3,4 +3,4 @@ numpy
 python-forecastio
 docker
 Faker
-socketIO_client
+socketIO_client_nexus

@@ -21,8 +21,9 @@ def receive_button(d):
         print('waiting')
         # signal.signal(signal.SIGUSR1, receive_signal)
         signal.sigwait((signal.SIGUSR1,))
-        #socketsend("GENERAL", d.getLatitude(), d.getLongitude(), d.getPersonalid())
+        socketsend("fire", d.getLatitude(), d.getLongitude(), d.getPersonalid())
         print('socketsend')
+        print('Senyal d emergencia enviada')
 
 
 def stay_alive(dev, timer):
@@ -117,6 +118,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegDoc())
         print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID[0])
@@ -139,6 +141,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegPac())
         print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID[0])
@@ -163,6 +166,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegAmb())
         print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getPlate()))
         device.setId(deviceID[0])
@@ -181,6 +185,7 @@ if __name__ == '__main__':
         device.setLongitude(y)
         deviceID = createDevice(device.jsonRegSmoke())
         print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID[0])
@@ -201,6 +206,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegWheather())
         print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID[0])
@@ -220,6 +226,7 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegAir())
         print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID[0])
