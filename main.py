@@ -5,13 +5,30 @@ from libs.sensors import *
 from libs.helper import *
 from faker import Faker
 from libs.send import *
+from libs.sockets import *
 import sys
 import threading
 import getopt
+import signal
+import subprocess
+
+def receive_signal(s, c):
+    print('¡Button pushed!')
 
 
-def stay_alive(dev, interval=10):
-    threading.Timer(interval, stay_alive, [dev], {}).start()
+def receive_button(d):
+    while True:
+        print('waiting')
+        # signal.signal(signal.SIGUSR1, receive_signal)
+        signal.sigwait((signal.SIGUSR1,))
+        socketsend("fire", d.getLatitude(), d.getLongitude(), d.getPersonalid())
+        print('socketsend')
+        print('Senyal d emergencia enviada')
+
+
+def stay_alive(dev, timer):
+    threading.Timer(timer, stay_alive, [dev, timer], {}).start()
+
     if type == 1:
         if dev.getMovement() is 1:
             x, y = ips_coordinates(dev.getBuilding())
@@ -19,7 +36,7 @@ def stay_alive(dev, interval=10):
             dev.setLongitude(y)
         data = dev.jsonDoc()
         print(data)
-        updateDevice(dev.getPersonalid(), data)
+        updateDevice(dev.getPersonalid(), data, dev.getToken())
 
     elif type == 2:
         if dev.getMovement() is 1:
@@ -28,11 +45,11 @@ def stay_alive(dev, interval=10):
             dev.setLongitude(y)
         dev.setTemp(body_thermometer(dev.getTemp()))
         dev.setHeart_rate(heart_rate_monitor(dev.getHeart_rate()))
-        dev.setBlood_pressure(blood_pressure_monitor(dev.getBlood_pressure()[0],dev.getBlood_pressure()[1]))
+        dev.setBlood_pressure(blood_pressure_monitor(dev.getBlood_pressure()[0], dev.getBlood_pressure()[1]))
 
         data = dev.jsonPac()
         print(data)
-        updateDevice(dev.getPersonalid(), data)
+        updateDevice(dev.getPersonalid(), data, dev.getToken())
 
     elif type == 3:
         f = dev.getFuelAmount()
@@ -44,13 +61,13 @@ def stay_alive(dev, interval=10):
 
         data = dev.jsonAmb()
         print(data)
-        updateDevice(dev.getId(), data)
+        updateDevice(dev.getId(), data, dev.getToken())
 
     elif type == 4:
         dev.setStatus(smoke_detector())
         data = dev.jsonSmoke()
         print(data)
-        updateDevice(dev.getIdDev(), data)
+        updateDevice(dev.getIdDev(), data, dev.getToken())
 
     elif type == 5:
         dev.set_temperature(thermometer())
@@ -58,11 +75,20 @@ def stay_alive(dev, interval=10):
         dev.set_air_pressure(barometer())
         data = dev.jsonWeather()
         print(data)
+
+        updateDevice(dev.getIdDev(), data, dev.getToken())
+
+
+    elif type == 6:
+        data = dev.jsonAir()
+        print(data)
         updateDevice(dev.getIdDev(), data)
+
 
 def usage():
     print("usage: main.py -t <device_type> -i <time_interval>")
     sys.exit(2)
+
 
 if __name__ == '__main__':
 
@@ -87,13 +113,16 @@ if __name__ == '__main__':
         x,y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
-        #0 no te moviment es static, 1 es mou
+        # 0 no te moviment es static, 1 es mou
         device.setMovement(random.randint(0, 1))
 
         deviceID = createDevice(device.jsonRegDoc())
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
-        device.setPersonalid(deviceID)
+        device.setPersonalid(deviceID[0])
+        device.setToken(deviceID[1])
 
         if interval is None:
             interval = 10
@@ -111,13 +140,21 @@ if __name__ == '__main__':
         device.setBlood_pressure(blood_pressure_monitor(device.getBlood_pressure()[0], device.getBlood_pressure()[1]))
 
         deviceID = createDevice(device.jsonRegPac())
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
-        device.setPersonalid(deviceID)
+        device.setPersonalid(deviceID[0])
+        device.setToken(deviceID[1])
 
         if interval is None:
             interval = 10
-        stay_alive(device, interval)
+        alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
+        alive.setDaemon(False)
+        alive.start()
+
+        # signal nomes pel main thread, passem stay_alive a un altre thread
+        receive_button(device)
 
     elif type == 3:
         device = Ambulance()
@@ -128,9 +165,12 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegAmb())
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID))
-        print(jsonfy_data(deviceID, type, device.getName()))
-        device.setId(deviceID)
+        print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID[0]))
+        print(jsonfy_data(deviceID, type, device.getPlate()))
+        device.setId(deviceID[0])
+        device.setToken(deviceID[1])
 
         if interval is None:
             interval = 5
@@ -144,9 +184,13 @@ if __name__ == '__main__':
         device.setLatitude(x)
         device.setLongitude(y)
         deviceID = createDevice(device.jsonRegSmoke())
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
-        device.setIdDev(deviceID)
+        device.setIdDev(deviceID[0])
+        device.setToken(deviceID[1])
+
 
         if interval is None:
             interval = 10
@@ -161,13 +205,37 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegWheather())
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID))
+        print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
-        device.setIdDev(deviceID)
+        device.setIdDev(deviceID[0])
+        device.setToken(deviceID[1])
 
         if interval is None:
             interval = 900
         stay_alive(device, interval) # 900 seconds = 15 min to limit api calls
+
+    elif type == 6:
+        device = AirQuality()
+        building = random.choice(['A', 'B', 'Neapolis'])
+        device.setBuilding(building)
+        x,y = spawn_position(building)
+        device.setLatitude(x)
+        device.setLongitude(y)
+
+        deviceID = createDevice(device.jsonRegAir())
+        print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
+        print(jsonfy_data(deviceID, type, device.getName()))
+        device.setIdDev(deviceID[0])
+        device.setToken(deviceID[1])
+
+        if interval is None:
+            interval = 300
+        stay_alive(device, interval)
+        # 300 seconds = 5 min
 
     else:   # default, no type defined
         usage()

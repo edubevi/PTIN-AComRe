@@ -11,6 +11,7 @@ class Person:
         self.__lon = None
         self.__building = None
         self.__movement = None
+        self.__token = None
 
     # Getters
     def getName(self):
@@ -31,7 +32,13 @@ class Person:
     def getMovement(self):
         return self.__movement
 
+    def getToken(self):
+        return self.__token
+
     # Setters
+    def setToken(self, t):
+        self.__token = t
+
     def setName(self, name):
         self.__name = name
 
@@ -135,11 +142,17 @@ class Patient(Person):
 
 class Doctor(Person):
     def __init__(self, name):
+        spec_list = ["GENERAL", "CARDIOLOGIST"]
         super(Doctor, self).__init__(name)
+        self.__speciality = numpy.random.choice(spec_list,p=[0.5,0.5])
         self.__availability = 0
         self.__type = 1
 
     # Getters
+
+    def getSpec(self):
+        return self.__speciality
+
     def getType(self):
         return self.__type
 
@@ -156,6 +169,7 @@ class Doctor(Person):
         print("PERSONAL INFO:")
         print("Name = " + self.getName())
         print("Personal ID = " + self.getPersonalid())
+        print("Speciality = " + self.getSpec())
         print()
         print("DOC INFO:")
         print("doc id =  " + self.__doc_id)
@@ -164,6 +178,9 @@ class Doctor(Person):
         print(self.getAvailability())
 
     # Setters
+    def setSpec(self, spec):
+        self.__speciality = spec
+
     def setDoc_id(self, id):
         self.__doc_id = id
 
@@ -176,5 +193,6 @@ class Doctor(Person):
 
     def jsonDoc(self):
         return {'id': self.getPersonalid(),
+                'speciality': self.getSpec(),
                 'latitude': self.getLatitude(),
                 'longitude': self.getLongitude()}

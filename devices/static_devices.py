@@ -11,6 +11,7 @@ class Static_Device:
         self.__building = None
         fake = Faker()
         self.__name = fake.mac_address()
+        self.__token = None
 
 
     # Getters
@@ -29,6 +30,10 @@ class Static_Device:
     def getName(self):
         return self.__name
 
+    def getToken(self):
+        return self.__token
+
+
     # Setters
     def setIdDev(self, idDev):
         self.__idDev = idDev
@@ -41,6 +46,9 @@ class Static_Device:
 
     def setBuilding(self, b):
         self.__building = b
+
+    def setToken(self, t):
+        self.__token = t
 
 
 class Smoke_detector(Static_Device):
@@ -80,6 +88,34 @@ class Smoke_detector(Static_Device):
                 'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'status': self.getStatus()}
+
+
+class AirQuality(Static_Device):
+    def __init__(self):
+        super(AirQuality, self).__init__()
+        self.__id = None
+        self.__no2 = 4
+        self.__no2_unit = "µg/m³"
+        self.__pm10 = 14
+        self.__pm10_unit = "µg/m³"
+        self.__type = 6
+
+    def set_no2(self, n):
+        self.__no2 = n
+
+    def set_pm10(self, p):
+        self.__pm10 = p
+
+    def jsonRegAir(self):
+        return {'name': self.getName(),
+                'type': self.getType()}
+
+    def jsonAir(self):
+        return {'id': self.getIdDev(),
+                'latitude': self.getLatitude(),
+                'longitude': self.getLongitude(),
+                'no2': self.__no2,
+                'pm10': self.__pm10}
 
 
 class WeatherStation(Static_Device):
