@@ -152,7 +152,6 @@ def button_push(client):
     print("------------------------------------")
     container_list = client.containers.list()
     i = 0
-    op = 0
     patient_list = list()
     if num_devices["patient"] == 0:
         print("There are no running containers.")
@@ -167,19 +166,20 @@ def button_push(client):
                 i += 1
 
         print("")
-        while -1 < op < i+1:
-            try:
-                op = int(input("Please select a container: "))
-                if op < 0 or op > i+1:
-                    raise ValueError
-            except (ValueError, TypeError):
+        try:
+            op = int(input("Please select a container: "))
+            if op < 0 or op > i+1:
+                raise ValueError
+        except (ValueError, TypeError):
                 print("ERROR: Invalid option.")
                 time.sleep(1)
 
         selected = patient_list[op]
+        print(selected)
         try:
             get_device_id(selected)
-            selected.kill(signal='SIGUSR1')
+            selected.kill("SIGUSR1")
+            print("Signal enviat")
         except docker.errors.APIError:
             pass
 

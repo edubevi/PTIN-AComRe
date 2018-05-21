@@ -1,7 +1,7 @@
-from socketIO_client import SocketIO
+from socketIO_client_nexus import SocketIO
 
 
-def socketsend(type, latitude, longitude, id):
-    with SocketIO('https://ptin2018.herokuapp.com') as socketIO:
-        socketIO.emit('alarm', {'type': type, 'lat': latitude, 'long': longitude, 'pacient': id})
-        socketIO.wait(seconds=1)
+def socketsend(alarmtype, lat, long, id):
+    with SocketIO('https://ptin2018.herokuapp.com', params={'id': id}) as socketIO:
+        socketIO.emit(alarmtype)
+        socketIO.wait(seconds=3)

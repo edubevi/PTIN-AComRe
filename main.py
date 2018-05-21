@@ -10,7 +10,7 @@ import sys
 import threading
 import getopt
 import signal
-
+import subprocess
 
 def receive_signal(s, c):
     print('¡Button pushed!')
@@ -21,7 +21,7 @@ def receive_button(d):
         print('waiting')
         # signal.signal(signal.SIGUSR1, receive_signal)
         signal.sigwait((signal.SIGUSR1,))
-        socketsend("GENERAL", d.getLatitude(), d.getLongitude(), d.getPersonalid())
+        #socketsend("GENERAL", d.getLatitude(), d.getLongitude(), d.getPersonalid())
         print('socketsend')
 
 
