@@ -1,5 +1,5 @@
 # PTIN-AComRe
-
+## Getting Started
 Projecte per l'assignatura PTIN curs 2017-18, EPSEVG-UPC
 
 El projecte de l'equip 3 està principalment escrit en Python. Per desenvolupar instal·lar els requeriments:
@@ -36,4 +36,16 @@ Paràmetre `-i` seguit d'un integer (segons) indica l'interval amb que el dispos
 La orquestració de l'entorn virtual es fa amb l'aplicació `orchestrer_tool`. Per executar l'eina CLI
 ```python
 python3 orchestrer_tool.py
-``` 
+```
+
+### Built with
+- [Docker](https://docs.docker.com/)
+- [tkinter](https://wiki.python.org/moin/TkInter): Python's de-facto standard GUI
+- [Faker](http://faker.readthedocs.io/en/master/):  a Python package that generates fake data
+
+# Autors
+- Adrià Pedraza
+- Eduard Berenguer
+- Joan Sanchez
+- Pere Montpeó
+- Pol Pericàs
