@@ -52,6 +52,21 @@
       "tyres_pressure_alarm": false
     }
   },
+    "stretcher": {
+    "device": "stretcher",
+    "type": "vehicle",
+    "description": "Smart stretcher with battery level and GPS sensors attached",
+    "sensors": ["gps","battery_level"],
+    "properties": {
+      "device": "stretcher",
+      "id": "",
+      "latitude": "",
+      "longitude": "",
+      "moving_status": false,
+      "battery_level": "%",
+      "range": "",
+      "range_unit": "m"
+    },
   "smoke": {
     "device": "smoke_detector",
     "type": "static",
