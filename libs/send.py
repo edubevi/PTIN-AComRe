@@ -11,6 +11,7 @@ def updateDevice(id, dades):
     #print (req.status_code, req.reason)
 '''
 
+#Amb activació
 def createDevice(nametype):
     req = requests.post('http://ptin2018.herokuapp.com/api/devices',  data = nametype)
     retorn = json.loads(req.content)
