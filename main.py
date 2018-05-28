@@ -16,19 +16,25 @@ def receive_signal(s, c):
     print('¡Button pushed!')
 
 
+
 def receive_button(d):
     while True:
         print('waiting')
         # signal.signal(signal.SIGUSR1, receive_signal)
         signal.sigwait((signal.SIGUSR1,))
-        socketsend("fire", d.getLatitude(), d.getLongitude(), d.getPersonalid())
-        print('socketsend')
-        print('Senyal d emergencia enviada')
+        if d.getType() == 4:
+            socketsend("fire", d.getLatitude(), d.getLongitude())
+            print("Alarma d'incendi enviada")
+        elif d.getType() == 2:
+            socketsend("fire", d.getLatitude(), d.getLongitude())
+            print('Senyal d emergencia enviada')
+
+
 
 
 def stay_alive(dev, timer):
     threading.Timer(timer, stay_alive, [dev, timer], {}).start()
-
+    # Doctor
     if type == 1:
         if dev.getMovement() is 1:
             x, y = ips_coordinates(dev.getBuilding())
@@ -37,7 +43,7 @@ def stay_alive(dev, timer):
         data = dev.jsonDoc()
         print(data)
         updateDevice(dev.getPersonalid(), data, dev.getToken())
-
+    # Patient
     elif type == 2:
         if dev.getMovement() is 1:
             x, y = ips_coordinates(dev.getBuilding())
@@ -50,7 +56,7 @@ def stay_alive(dev, timer):
         data = dev.jsonPac()
         print(data)
         updateDevice(dev.getPersonalid(), data, dev.getToken())
-
+    # Ambulance
     elif type == 3:
         f = dev.getFuelAmount()
         x,y,f,d = gps(dev.getRoute())
@@ -62,13 +68,13 @@ def stay_alive(dev, timer):
         data = dev.jsonAmb()
         print(data)
         updateDevice(dev.getId(), data, dev.getToken())
-
+    # Somoke detector
     elif type == 4:
         dev.setStatus(smoke_detector())
         data = dev.jsonSmoke()
         print(data)
         updateDevice(dev.getIdDev(), data, dev.getToken())
-
+    # Thermometer
     elif type == 5:
         dev.set_temperature(thermometer())
         dev.set_humidity(hygrometer())
@@ -77,12 +83,20 @@ def stay_alive(dev, timer):
         print(data)
 
         updateDevice(dev.getIdDev(), data, dev.getToken())
-
-
+    # Air quality
     elif type == 6:
         data = dev.jsonAir()
         print(data)
         updateDevice(dev.getIdDev(), data)
+    # Stretcher
+    elif type == 7:
+        if dev.getMovement() is 1:
+            x, y = ips_coordinates(dev.getBuilding())
+            dev.setLatitude(x)
+            dev.setLongitude(y)
+        data = dev.jsonStr()
+        print(data)
+        updateDevice(dev.getId(), data, dev.getToken())
 
 
 def usage():
@@ -196,6 +210,10 @@ if __name__ == '__main__':
             interval = 10
         stay_alive(device, interval)
 
+        alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
+        alive.setDaemon(False)
+        alive.start()
+
     elif type == 5:
         device = WeatherStation()
         building = random.choice(['A', 'B', 'Neapolis'])
@@ -236,6 +254,26 @@ if __name__ == '__main__':
             interval = 300
         stay_alive(device, interval)
         # 300 seconds = 5 min
+
+    elif type == 7:
+        device = Stretcher()
+        building = random.choice(['A', 'B', 'Neapolis'])
+        device.setBuilding(building)
+        x, y = spawn_position(building)
+        device.setLatitude(x)
+        device.setLongitude(y)
+
+        deviceID = createDevice(device.jsonRegStr())
+        print(deviceID[0])
+        enableDevice(deviceID[0],deviceID[1])
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID[0]))
+        print(jsonfy_data(deviceID, type, device.getPlate()))
+        device.setId(deviceID[0])
+        device.setToken(deviceID[1])
+
+        if interval is None:
+            interval = 300
+        stay_alive(device, interval)
 
     else:   # default, no type defined
         usage()

@@ -3,9 +3,9 @@
 import time, docker, subprocess, sys, json
 
 # List of allowed devices with their type id.
-devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5,"air":6}
+devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5,"air":6, "stretcher":7}
 # stores the number of devices by type.
-num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0,"air":0}
+num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0,"air":0, "stretcher":0}
 
 
 def usage():

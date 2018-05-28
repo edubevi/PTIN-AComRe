@@ -185,6 +185,22 @@ def gas_tank(prev_level=100,distance=0):
 
         return remaining_level
 
+def battery_level(prev_level=100,distance=0):
+    # liters consumption per 100km (100000 meters)
+    consumption = 7.4
+
+    if distance is 0:
+        return prev_level
+    else:
+        distance = distance / 100000
+        consumed = distance * consumption
+        remaining_level = prev_level - consumed
+        #refuel
+        if prev_level < consumed:
+            prev_level = 100
+            remaining_level = prev_level - consumed
+
+        return remaining_level
 
 def amb_availability():
     return random.randrange(2)
@@ -196,6 +212,8 @@ def tyre_pressure_alarm():
 
 def smoke_detector():
     return numpy.random.choice(numpy.arange(0, 2), p=[0.99, 0.01])
+
+
 
 
 # weather

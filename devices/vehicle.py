@@ -66,7 +66,7 @@ class Ambulance(Vehicle):
         self.__fuel = 100
         self.__t_pressure = None
         self.__availability = 1
-        self.__type = 3
+        self.__type = 2
 
     # Getters
     def getFuelAmount(self):
@@ -82,7 +82,7 @@ class Ambulance(Vehicle):
             return "Occupied"
 
     def getType(self):
-        return self.__type
+        return int(self.__type)
 
     def getInfo(self):
         print("VEHICLE INFO:")
@@ -113,3 +113,59 @@ class Ambulance(Vehicle):
                 'longitude': self.getLongitude(),
                 'fuel': self.getFuelAmount(),
                 'pressure': self.getTirePressure()}
+
+class Stretcher(Vehicle):
+
+    def __init__(self):
+        super(Stretcher, self).__init__()
+        self.__availability = 1
+        self.__battery_level = 100.0
+        self.__building = None
+        self.__type = 7
+
+    # Getters
+
+    def getAvailability(self):
+        if self.__availability == 1:
+            return "Available"
+        else:
+            return "Occupied"
+
+    def getBuilding(self):
+        return self.__building
+
+    def getBatterylevel(self):
+        return self.__battery_level
+
+    def getType(self):
+        return self.__type
+
+    def getInfo(self):
+        print("VEHICLE INFO:")
+        print("id = " + self.getId())
+        print("type = Stretcher")
+        print("Battery = " + self.getBatterylevel() + "%")
+        print()
+        print("STATUS:")
+        print(self.getAvailability())
+
+    # Setters
+
+    def setAvailability(self, status):
+        self.__availability = status
+
+    def setBatterylevel(self, level):
+        self.__battery_level = level
+
+    def setBuilding(self, building):
+        self.__building = building
+
+    def jsonRegStr(self):
+        return {'name': self.getPlate(),
+                'type': self.getType()}
+
+    def jsonStr(self):
+        return {'id': self.getId(),
+                'latitude': self.getLatitude(),
+                'longitude': self.getLongitude(),
+                'battery': self.getBatterylevel()}
