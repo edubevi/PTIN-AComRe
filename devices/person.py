@@ -57,6 +57,9 @@ class Person:
     def setMovement(self, m):
         self.__movement = m
 
+    def setToken(self, t):
+        self.__token = t
+
 class Patient(Person):
 
     def __init__(self, name):
@@ -70,11 +73,11 @@ class Patient(Person):
        self.__sys = numpy.random.choice(sys_values,p=[0.05,0.7,0.2,0.05])
        self.__dia = numpy.random.choice(dia_values,p=[0.05,0.7,0.2,0.05])
        self.__doc_proximity = 0
-       self.__type = 2
+       self.__type = 4
 
     # Getters
     def getType(self):
-        return self.__type
+        return int(self.__type)
 
     def getRoom(self):
         return self.__name
@@ -154,7 +157,7 @@ class Doctor(Person):
         return self.__speciality
 
     def getType(self):
-        return self.__type
+        return int(self.__type)
 
     def getDoc_id(self):
         return self.__doc_id

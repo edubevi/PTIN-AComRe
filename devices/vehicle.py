@@ -66,7 +66,7 @@ class Ambulance(Vehicle):
         self.__fuel = 100
         self.__t_pressure = None
         self.__availability = 1
-        self.__type = 3
+        self.__type = 2
 
     # Getters
     def getFuelAmount(self):
@@ -82,7 +82,7 @@ class Ambulance(Vehicle):
             return "Occupied"
 
     def getType(self):
-        return self.__type
+        return int(self.__type)
 
     def getInfo(self):
         print("VEHICLE INFO:")
