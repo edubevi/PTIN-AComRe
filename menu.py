@@ -15,14 +15,17 @@ def runcontainers():
 
     def create_container(client, type, num):
         count = 0
-
+        # Create window for print containers creates
         finestra = Toplevel()
         finestra.title('Creating Container/s')
         finestra.geometry("450x205+440+300")
+        # Add buttom close window
         Button(finestra, text='Close', command=finestra.destroy).place(x=200, y=165)
 
+        # Add text for print
         t = Text(finestra, height=10)
 
+        # While create containers and write on text
         while count != num:
             c_name = type + "_%d" % (num_devices[type])
             c_type = "-t " + str(devices[type])
@@ -38,46 +41,69 @@ def runcontainers():
             num_devices[type] += 1
             count += 1
 
+    # Create window menu create containers
     dialeg1 = Toplevel(window)
     dialeg1.title("Run Container/s")
     dialeg1.geometry("270x165+550+300")
 
+    # Add label
     runcont = StringVar()
     runcont.set("Allowed device type:")
     Label(dialeg1, textvariable=runcont).place(x=10, y=10)
 
     text_info2 = StringVar()
 
+    # Introduce radiobuttoms for select type devices
     Radiobutton(dialeg1, text="Patient", variable=text_info2, value='patient').place(x=10, y=30)
     Radiobutton(dialeg1, text="Doctor", variable=text_info2, value='doctor').place(x=10, y=50)
     Radiobutton(dialeg1, text="Ambulance", variable=text_info2, value='ambulance').place(x=90, y=30)
     Radiobutton(dialeg1, text="Smoke", variable=text_info2, value='smoke').place(x=90, y=50)
     Radiobutton(dialeg1, text="Weather", variable=text_info2, value='weather').place(x=180, y=50)
 
+    # Add label
     runcont2 = StringVar()
     runcont2.set("Number of replicas:")
     Label(dialeg1, textvariable=runcont2).place(x=10, y=80)
 
+    # Add text for introduce numbers
     text2 = StringVar()
     Entry(dialeg1, textvariable=text2, width=30).place(x=10, y=100)
 
+    # Add buttoms for create this containers or close window
     Button(dialeg1, text='Create', command=boton_ok).place(x=60, y=130)
-
     Button(dialeg1, text='Close', command=dialeg1.destroy).place(x=150, y=130)
 
 
-# def stop_all(client):
-#     container_list = client.containers.list()
-#     if len(container_list) == 0:
-#         print("There are no containers to stop.")
-#     else:
-#         print("+ Stopping container/s....")
-#         for container in container_list:
-#             container.stop()
-#             print("+ Container with short_id=" + container.short_id + " has been stopped.")
-#         for key in num_devices.keys(): num_devices[key] = 0  # updates the number of all devices to 0
-#
-#
+def stop_all():
+
+    #Create window for print stopped all containers
+    finestra = Toplevel()
+    finestra.title('All container/s stopped')
+    finestra.geometry("450x205+440+300")
+    Button(finestra, text='Close', command=finestra.destroy).place(x=200, y=165)
+
+    # Add text for print
+    t = Text(finestra, height=10)
+    text_ = ''
+
+    # Containers list
+    container_list = client.containers.list()
+    if len(container_list) == 0:
+        text_ = "There are no containers to stop."
+        t.insert(INSERT, text_)
+        t.pack()
+        print(text_)
+    else:
+        print("+ Stopping container/s....")
+        for container in container_list:
+            container.stop()
+            text_ = "+ Container with short_id=" + container.short_id + " has been stopped.\n"
+            t.insert(INSERT, text_)
+            t.pack()
+            print(text_)
+        for key in num_devices.keys(): num_devices[key] = 0  # updates the number of all devices to 0
+
+
 # def stop_containers(client, num, type):
 #     # container_list = client.containers.list(filters={'name':'doctor_*'})
 #     # llista amb el short_id dels contenidors que executa el host.
@@ -105,32 +131,73 @@ def runcontainers():
 #             stopped_container += 1
 
 
-# def list_running_containers(client):
-#     print("------------------------------------")
-#     print("List of running containers")
-#     print("------------------------------------")
-#     container_list = client.containers.list()
-#     if len(container_list) == 0:
-#         print("There are no running containers.")
-#     else:
-#         print("SHORT_ID\tTYPE\t\tNAME")
-#         for container in container_list:
-#             print(container.short_id, end='\t')
-#             if "doctor" in container.name:
-#                 print("doctor", end='\t\t')
-#             elif "patient" in container.name:
-#                 print("patient", end='\t\t')
-#             elif "ambulance" in container.name:
-#                 print("ambulance", end='\t\t')
-#             elif "smoke" in container.name:
-#                 print("smoke", end='\t\t')
-#             elif "weather" in container.name:
-#                 print("weather", end='\t\t')
-#             elif "air" in container.name:
-#                 print("airq", end='\t\t')
-#             else:
-#                 print("-", end='\t\t')
-#             print(container.name)
+def list_running_containers():
+    # Create window for print stopped all containers
+    finestra = Toplevel()
+    finestra.title("List of running container/s")
+    finestra.geometry("350x205+490+300")
+    Button(finestra, text='Close', command=finestra.destroy).place(x=150, y=165)
+
+    # Add text for print
+    t = Text(finestra, height=10)
+    text_ = ''
+
+    print("List of running containers")
+    container_list = client.containers.list()
+    if len(container_list) == 0:
+        text_ = "There are no running containers."
+        t.insert(INSERT, text_)
+        t.pack()
+        print(text_)
+    else:
+        text_ = "SHORT_ID\t\tTYPE\t\tNAME\n"
+        t.insert(INSERT, text_)
+        t.pack()
+        print(text_)
+        for container in container_list:
+            text_ = container.short_id + '\t'
+            t.insert(INSERT, text_)
+            t.pack()
+            print(text_,end='\t')
+            if "doctor" in container.name:
+                text_ = "\tdoctor" + '\t\t'
+                t.insert(INSERT, text_)
+                t.pack()
+                print(text_,end='\t')
+            elif "patient" in container.name:
+                text_ = "\tpatient" + '\t\t'
+                t.insert(INSERT, text_)
+                t.pack()
+                print(text_,end='\t')
+            elif "ambulance" in container.name:
+                text_ = "\tambulance" + '\t\t'
+                t.insert(INSERT, text_)
+                t.pack()
+                print(text_,end='\t')
+            elif "smoke" in container.name:
+                text_ = "\tsmoke" + '\t\t'
+                t.insert(INSERT, text_)
+                t.pack()
+                print(text_,end='\t')
+            elif "weather" in container.name:
+                text_ = "\tweather" + '\t\t'
+                t.insert(INSERT, text_)
+                t.pack()
+                print(text_,end='\t')
+            elif "air" in container.name:
+                text_ = "\tairq" + '\t\t'
+                t.insert(INSERT, text_)
+                t.pack()
+                print(text_,end='\t')
+            else:
+                text_ = "\t-" + '\t\t'
+                t.insert(INSERT, text_)
+                t.pack()
+                print(text_,end='\t')
+            text_ = container.name + '\n'
+            t.insert(INSERT, text_)
+            t.pack()
+            print(text_)
 
 
 def init_num_devices(client):
@@ -249,14 +316,14 @@ if __name__ == '__main__':
 
     boton1 = Button(window, text="Run container/s", command=runcontainers, height=1, width=22).place(x=10, y=30)
 
-    # boton2 = Button(window, text="Show running containers", command=list_running_containers, height=1, width=22).place(x=10, y=60)
-    #
+    boton2 = Button(window, text="Show running containers", command=list_running_containers, height=1, width=22).place(x=10, y=60)
+
     # boton3 = Button(window, text="Show containers stats", command=runcontainers, height=1, width=22).place(x=10, y=90)
     #
     # boton4 = Button(window, text="Stop container/s", command=stop_containers, height=1, width=22).place(x=10, y=120)
     #
-    # boton5 = Button(window, text="Stop all running containers", command=runcontainers, height=1, width=22).place(x=10, y=150)
-    #
+    boton5 = Button(window, text="Stop all running containers", command=stop_all, height=1, width=22).place(x=10, y=150)
+
     # boton6 = Button(window, text="Delete all stopped containers", command=runcontainers, height=1, width=22).place(x=10, y=180)
     #
     # boton7 = Button(window, text="Show devices pertype", command=runcontainers, height=1, width=22).place(x=10, y=180)
