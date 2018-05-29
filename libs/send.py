@@ -29,3 +29,5 @@ def enableDevice(id, token):
     headers = {"Authorization": "Bearer "+token}
     dades = {'enabled': True, 'deleted': False}
     req = requests.put('https://ptin2018.herokuapp.com/api/devices'+id, data = dades, headers = headers)
+
+
