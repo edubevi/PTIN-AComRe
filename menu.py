@@ -215,33 +215,61 @@ def init_num_devices(client):
     if len(wea_list) != 0: num_devices["air"] = len(air_list)
 
 
-# def show_stats():
-#     subprocess.call(
-#         ['docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.Container}}" --no-stream'],
-#         shell=True)
+def show_stats():
+    subprocess.call(
+        ['docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.Container}}" --no-stream'],
+        shell=True)
 
 
-# def show_types(client):
-#     print("------------------------------------")
-#     print("Devices per type")
-#     print("------------------------------------")
-#     container_list = client.containers.list()
-#     if len(container_list) == 0:
-#         print("There are no running containers.")
-#     else:
-#         if num_devices["doctor"] != 0:
-#             print('Doctors:', num_devices["doctor"], end='\t')
-#         if num_devices["patient"] != 0:
-#             print('Patients:', num_devices["patient"], end='\t')
-#         if num_devices["ambulance"] != 0:
-#             print('Ambulances:', num_devices["ambulance"], end='\t')
-#         if num_devices["smoke"] != 0:
-#             print('Smoke:', num_devices["smoke"], end='\t')
-#         if num_devices["weather"] != 0:
-#             print('Weather:', num_devices["weather"], end='\t')
-#         if num_devices["air"] != 0:
-#             print('Air quality:', num_devices["air"], end='\t')
+def show_types():
+    # Create window for print stopped all containers
+    finestra = Toplevel()
+    finestra.title("List of running container/s")
+    finestra.geometry("350x205+490+300")
+    Button(finestra, text='Close', command=finestra.destroy).place(x=150, y=165)
 
+    # Add text for print
+    t = Text(finestra, height=10)
+    text_ = ''
+
+    print("Devices per type")
+    container_list = client.containers.list()
+    if len(container_list) == 0:
+        text_ = "There are no running containers."
+        t.insert(INSERT, text_)
+        t.pack()
+        print(text_)
+    else:
+        if num_devices["doctor"] != 0:
+            text_ = 'Doctors:' + str(num_devices["doctor"]) + '\n'
+            t.insert(INSERT, text_)
+            t.pack()
+            print(text_, end='\t')
+        if num_devices["patient"] != 0:
+            text_ = 'Patients:' + str(num_devices["patient"]) + '\n'
+            t.insert(INSERT, text_)
+            t.pack()
+            print(text_, end='\t')
+        if num_devices["ambulance"] != 0:
+            text_ = 'Ambulances:' + str(num_devices["ambulance"]) + '\n'
+            t.insert(INSERT, text_)
+            t.pack()
+            print(text_, end='\t')
+        if num_devices["smoke"] != 0:
+            text_ = 'Smoke:' + str(num_devices["smoke"]) + '\n'
+            t.insert(INSERT, text_)
+            t.pack()
+            print(text_, end='\t')
+        if num_devices["weather"] != 0:
+            text_ = 'Weather:' + str(num_devices["weather"]) + '\n'
+            t.insert(INSERT, text_)
+            t.pack()
+            print(text_, end='\t')
+        # if num_devices["airq"] != 0:
+        #     text_ = 'Air quality:' + str(num_devices["air"]) + '\t'
+        #     t.insert(INSERT, text_)
+        #     t.pack()
+        #     print(text_, end='\t')
 
 # def button_push(client):
 #     print("------------------------------------")
@@ -318,15 +346,15 @@ if __name__ == '__main__':
 
     boton2 = Button(window, text="Show running containers", command=list_running_containers, height=1, width=22).place(x=10, y=60)
 
-    # boton3 = Button(window, text="Show containers stats", command=runcontainers, height=1, width=22).place(x=10, y=90)
-    #
-    # boton4 = Button(window, text="Stop container/s", command=stop_containers, height=1, width=22).place(x=10, y=120)
-    #
-    boton5 = Button(window, text="Stop all running containers", command=stop_all, height=1, width=22).place(x=10, y=150)
+    boton3 = Button(window, text="Show devices per type", command=show_types, height=1, width=22).place(x=10, y=90)
 
-    # boton6 = Button(window, text="Delete all stopped containers", command=runcontainers, height=1, width=22).place(x=10, y=180)
+    # boton4 = Button(window, text="Show containers stats", command=show_stats, height=1, width=22).place(x=10, y=120)
     #
-    # boton7 = Button(window, text="Show devices pertype", command=runcontainers, height=1, width=22).place(x=10, y=180)
+    # boton5 = Button(window, text="Stop container/s", command=stop_containers, height=1, width=22).place(x=10, y=150)
+    #
+    boton6 = Button(window, text="Stop all running containers", command=stop_all, height=1, width=22).place(x=10, y=180)
+
+    # boton7 = Button(window, text="Delete all stopped containers", command=runcontainers, height=1, width=22).place(x=10, y=180)
     #
     # boton8 = Button(window, text="Push emergency button", command=runcontainers, height=1, width=22).place(x=10, y=210)
 
