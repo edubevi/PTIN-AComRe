@@ -199,3 +199,33 @@ class Doctor(Person):
                 'speciality': self.getSpec(),
                 'latitude': self.getLatitude(),
                 'longitude': self.getLongitude()}
+
+
+class Nurse(Person):
+    def __init__(self, name):
+        super(Nurse, self).__init__(name)
+        self.__availability = 0
+        self.__type = 7
+
+    # Getters
+    def getType(self):
+        return int(self.__type)
+
+    def getAvailability(self):
+        if self.__availability == 0:
+            return "Available"
+        else:
+            return "Occupied"
+
+    # Setters
+    def setAvailability(self, status):
+        self.__availability = status
+
+    def jsonRegNur(self):
+        return {'name': self.getName(),
+                'type': self.getType()}
+
+    def jsonNur(self):
+        return {'id': self.getPersonalid(),
+                'latitude': self.getLatitude(),
+                'longitude': self.getLongitude()}
