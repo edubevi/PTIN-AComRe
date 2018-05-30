@@ -100,6 +100,9 @@ class AirQuality(Static_Device):
         self.__pm10_unit = "µg/m³"
         self.__type = 6
 
+    def getType(self):
+        return int(self.__type)
+
     def set_no2(self, n):
         self.__no2 = n
 

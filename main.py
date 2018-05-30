@@ -87,7 +87,7 @@ def stay_alive(dev, timer):
     elif type == 6:
         data = dev.jsonAir()
         print(data)
-        updateDevice(dev.getIdDev(), data)
+        updateDevice(dev.getIdDev(), data, dev.getToken())
     # Nurse
     elif type == 7:
         data = dev.jsonNur()
