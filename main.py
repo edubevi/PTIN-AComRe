@@ -88,8 +88,14 @@ def stay_alive(dev, timer):
         data = dev.jsonAir()
         print(data)
         updateDevice(dev.getIdDev(), data)
-    # Stretcher
+    # Nurse
     elif type == 7:
+        data = dev.jsonNur()
+        print(data)
+        updateDevice(dev.getPersonalid(), data, dev.getToken())
+
+    # Stretcher
+    elif type == 8:
         if dev.getMovement() is 1:
             x, y = ips_coordinates(dev.getBuilding())
             dev.setLatitude(x)
@@ -256,6 +262,27 @@ if __name__ == '__main__':
         # 300 seconds = 5 min
 
     elif type == 7:
+        device = Nurse(fake.name())
+        building = random.choice(['A', 'B', 'Neapolis'])
+        device.setBuilding(building)
+        x,y = spawn_position(building)
+        device.setLatitude(x)
+        device.setLongitude(y)
+
+        deviceID = createDevice(device.jsonRegNur())
+        print(deviceID[0])
+        enableDevice(deviceID[0], deviceID[1])
+        print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
+        print(jsonfy_data(deviceID, type, device.getName()))
+        device.setPersonalid(deviceID[0])
+        device.setToken(deviceID[1])
+
+        if interval is None:
+            interval = 10
+        stay_alive(device, interval)
+
+
+    elif type == 8:
         device = Stretcher()
         building = random.choice(['A', 'B', 'Neapolis'])
         device.setBuilding(building)

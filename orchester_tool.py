@@ -3,9 +3,9 @@
 import time, docker, subprocess, sys, json
 
 # List of allowed devices with their type id.
-devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5,"air":6, "stretcher":7}
+devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5,"air":6, "nurse":7, "stretcher":8}
 # stores the number of devices by type.
-num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0,"air":0, "stretcher":0}
+num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0,"air":0, "nurse":0, "stretcher":0}
 
 
 def usage():
@@ -101,6 +101,7 @@ def list_running_containers(client):
             elif "smoke" in container.name: print("smoke",end='\t\t')
             elif "weather" in container.name: print("weather",end='\t\t')
             elif "air" in container.name: print("airq",end='\t\t')
+            elif "nurse" in container.name: print("nurse",end='\t\t')
             else: print("-",end='\t\t')
             print(container.name)
 
@@ -108,6 +109,8 @@ def list_running_containers(client):
 def init_num_devices(client):
     doc_list = client.containers.list(filters={'name': "doctor_*"})
     if len(doc_list) != 0: num_devices["doctor"] = len(doc_list)
+    nur_list = client.containers.list(filters={'name': "nurse_*"})
+    if len(doc_list) != 0: num_devices["nurse"] = len(nur_list)
     pat_list = client.containers.list(filters={'name': "patient_*"})
     if len(pat_list) != 0: num_devices["patient"] = len(pat_list)
     amb_list = client.containers.list(filters={'name': "ambulance_*"})
@@ -134,6 +137,8 @@ def show_types(client):
     else:
         if num_devices["doctor"] != 0:
             print('Doctors:', num_devices["doctor"], end='\t')
+        if num_devices["nurse"] != 0:
+            print('Nurses:', num_devices["doctor"], end='\t')
         if num_devices["patient"] != 0:
             print('Patients:', num_devices["patient"], end='\t')
         if num_devices["ambulance"] != 0:
