@@ -8,14 +8,14 @@ devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5,"air":6,
 num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0,"air":0, "nurse":0, "stretcher":0}
 
 
-def usage():
-    p1 = subprocess.Popen(['dpkg','--get-selections'], stdout=subprocess.PIPE)
-    p2 = subprocess.Popen(['grep','docker-ce[[:space:]]*install$'],stdin=p1.stdout,stdout=subprocess.PIPE)
-    p3 = subprocess.Popen(['wc','-l'],stdin=p2.stdout, stdout=subprocess.PIPE)
-    output = p3.communicate()[0].decode('utf-8').split()
-    if output[0] != '1':
-        print("Docker is not installed. Please install it")
-        sys.exit()
+# def usage():
+#     p1 = subprocess.Popen(['dpkg','--get-selections'], stdout=subprocess.PIPE)
+#     p2 = subprocess.Popen(['grep','docker-ce[[:space:]]*install$'],stdin=p1.stdout,stdout=subprocess.PIPE)
+#     p3 = subprocess.Popen(['wc','-l'],stdin=p2.stdout, stdout=subprocess.PIPE)
+#     output = p3.communicate()[0].decode('utf-8').split()
+#     if output[0] != '1':
+#         print("Docker is not installed. Please install it")
+#         sys.exit()
 
 
 def menu():
@@ -198,7 +198,7 @@ def get_device_id(k):
 
 if __name__ == '__main__':
     # instantiate a client to talk with Docker daemon.
-    usage()
+    # usage()
     client = docker.from_env()
     # Inicialitza el nombre de dispositius que hi ha en execució per tipus.
     init_num_devices(client)

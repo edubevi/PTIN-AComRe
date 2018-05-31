@@ -1,3 +1,4 @@
+
 from devices.person import *
 from devices.vehicle import *
 from devices.static_devices import *

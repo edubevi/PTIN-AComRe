@@ -227,57 +227,57 @@ def list_running_containers():
             text_ = container.short_id + '\t'
             t.insert(INSERT, text_)
             t.pack()
-            print(text_,end='\t')
+            print(text_, end='\t')
             if "doctor" in container.name:
                 text_ = "\tdoctor" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "patient" in container.name:
                 text_ = "\tpatient" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "ambulance" in container.name:
                 text_ = "\tambulance" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "smoke" in container.name:
                 text_ = "\tsmoke" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "weather" in container.name:
                 text_ = "\tweather" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "air" in container.name:
                 text_ = "\tairq" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "air" in container.name:
                 text_ = "\tair" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "nurse" in container.name:
                 text_ = "\tnurse" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "stretcher" in container.name:
                 text_ = "\tstretcher" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             else:
                 text_ = "\t-" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             text_ = container.name + '\n'
             t.insert(INSERT, text_)
             t.pack()
@@ -453,15 +453,13 @@ if __name__ == '__main__':
     boton3 = Button(window, text="Show devices per type", command=show_types, height=1, width=22).place(x=10, y=90)
 
     # boton4 = Button(window, text="Show containers stats", command=show_stats, height=1, width=22).place(x=10, y=120)
-    #
+
     boton5 = Button(window, text="Stop container/s", command=stopped_containers, height=1, width=22).place(x=10, y=150)
 
     boton6 = Button(window, text="Stop all running containers", command=stop_all, height=1, width=22).place(x=10, y=180)
 
-    # boton7 = Button(window, text="Delete all stopped containers", command=runcontainers, height=1, width=22).place(x=10, y=180)
-    #
-    # boton8 = Button(window, text="Push emergency button", command=button_push, height=1, width=22).place(x=10, y=210)
+    # boton7 = Button(window, text="Push emergency button", command=button_push, height=1, width=22).place(x=10, y=210)
 
-    boton9 = Button(window, text="Exit", command=window.destroy, height=1, width=22).place(x=10, y=240)
+    boton8 = Button(window, text="Exit", command=window.destroy, height=1, width=22).place(x=10, y=240)
 
     window.mainloop()
