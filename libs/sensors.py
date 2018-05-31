@@ -158,8 +158,6 @@ def ips_coordinates_range(x, y):
         internal_long = random.uniform(1.734363, 1.732982)
     return internal_lat, internal_long
 
-
-
 # Doc sensors
 
 def doc_availability():
@@ -186,8 +184,8 @@ def gas_tank(prev_level=100,distance=0):
         return remaining_level
 
 def battery_level(prev_level=100,distance=0):
-    # liters consumption per 100km (100000 meters)
-    consumption = 7.4
+    # battery consumption per 100km (100000 meters)
+    consumption = 3.4
 
     if distance is 0:
         return prev_level
