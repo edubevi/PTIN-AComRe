@@ -16,6 +16,7 @@ import signal, time
 def capturing_emergency(dev):
     ''' Funcio que executara el dispositiu Doctor i Stretcher(Camilla) que capturara el missatge enviat pel Backend per Socket en el servei
     Doctor-Pacient per tal d'establir una ruta al pacient que te una emergencia.'''
+
     while 1:
         try:
             data = socketreceive(dev.getSocket())
@@ -27,7 +28,9 @@ def capturing_emergency(dev):
                 time.sleep(600) # Establim que estara 10 minuts ocupat i despres torna a estar disponible
                 dev.setAvailability(0)
         except:
+            #print("Error al llegir del socket")
             pass
+
 
 def receive_button(d):
     while True:
@@ -107,13 +110,10 @@ def stay_alive(dev, timer):
         updateDevice(dev.getPersonalid(), data, dev.getToken())
     # Stretcher
     elif type == 8:
-        if dev.getMovement() is 1:
-            x, y = ips_coordinates(dev.getBuilding())
-            dev.setLatitude(x)
-            dev.setLongitude(y)
         data = dev.jsonStr()
         print(data)
         updateDevice(dev.getId(), data, dev.getToken())
+
 
 def usage():
     print("usage: main.py -t <device_type> -i <time_interval>")
@@ -159,7 +159,7 @@ if __name__ == '__main__':
         if interval is None:
             interval = 10
 
-        receive_emergency = threading.Thread(taget=capturing_emergency, args=device, name='capturing_emergency')
+        receive_emergency = threading.Thread(target=capturing_emergency, args=(device,), name='capturing_emergency')
         receive_emergency.setDaemon(True)
         receive_emergency.start()
         alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
@@ -333,7 +333,7 @@ if __name__ == '__main__':
         if interval is None:
             interval = 300
 
-        receive_emergency = threading.Thread(taget=capturing_emergency, args=device, name='capturing_emergency')
+        receive_emergency = threading.Thread(target=capturing_emergency, args=(device,), name='capturing_emergency')
         receive_emergency.setDaemon(True)
         receive_emergency.start()
         alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')

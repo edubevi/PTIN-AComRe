@@ -42,7 +42,7 @@ def create_container(client, type, num):
     while count != num:
         c_name = type + "_%d" % (num_devices[type])
         c_type = "-t "+str(devices[type])
-        container = client.containers.run("virtualdev:latest",c_type,"-i 10", detach=True, name=c_name, auto_remove=True)
+        container = client.containers.run("edubevi/virtualdev:latest",c_type,"-i 10", detach=True, name=c_name, auto_remove=True)
         print("+ Container with short_id=" + container.short_id + " has been created.")
         num_devices[type] += 1
         count += 1
