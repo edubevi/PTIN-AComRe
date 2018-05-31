@@ -10,27 +10,38 @@ from libs.sockets import *
 import sys
 import threading
 import getopt
-import signal
-import subprocess
-
-def receive_signal(s, c):
-    print('¡Button pushed!')
+import signal, time
 
 
+def capturing_emergency(dev):
+    ''' Funcio que executara el dispositiu Doctor i Stretcher(Camilla) que capturara el missatge enviat pel Backend per Socket en el servei
+    Doctor-Pacient per tal d'establir una ruta al pacient que te una emergencia.'''
+    while 1:
+        try:
+            data = socketreceive(dev.getSocket())
+            if data:
+                patient_device_= data['requester']
+                dev.setLatitude(data['latitude'])
+                dev.setLongitude(data['longitude'])
+                dev.setAvailability(1)
+                time.sleep(600) # Establim que estara 10 minuts ocupat i despres torna a estar disponible
+                dev.setAvailability(0)
+        except:
+            pass
 
 def receive_button(d):
     while True:
-        print('waiting')
         # signal.signal(signal.SIGUSR1, receive_signal)
         signal.sigwait((signal.SIGUSR1,))
-        if d.getType() == 4:
-            socketsend("fire", d.getLatitude(), d.getLongitude())
-            print("Alarma d'incendi enviada")
-        elif d.getType() == 2:
-            socketsend("fire", d.getLatitude(), d.getLongitude())
-            print('Senyal d emergencia enviada')
-
-
+        print('¡Button pushed!')
+        if d.getType() == 3: # Envia senyal d'alarma d'incendis
+            #Descomentar quan socketsend estigui acabada
+            #socketsend('fire', d.getLatitude(), d.getLongitude(), d.getSocket())
+            print("Alarma d'incendi enviada!")
+        elif d.getType() == 4: # Envia senyal d'alarma Pacient
+            #Descomentar quan socketsend estigui acabada
+            #socketsend(2, d.getLatitude(), d.getLongitude(), d.getSocket())
+            print("Emergencia enviada!")
 
 
 def stay_alive(dev, timer):
@@ -94,7 +105,6 @@ def stay_alive(dev, timer):
         data = dev.jsonNur()
         print(data)
         updateDevice(dev.getPersonalid(), data, dev.getToken())
-
     # Stretcher
     elif type == 8:
         if dev.getMovement() is 1:
@@ -104,7 +114,6 @@ def stay_alive(dev, timer):
         data = dev.jsonStr()
         print(data)
         updateDevice(dev.getId(), data, dev.getToken())
-
 
 def usage():
     print("usage: main.py -t <device_type> -i <time_interval>")
@@ -127,6 +136,7 @@ if __name__ == '__main__':
         elif opt in ("-i", "--interval"):
             interval = int(arg)
 
+    # Device is Doctor
     if type == 1:
         device = Doctor(fake.name())
         building = random.choice(['A', 'B', 'Neapolis'])
@@ -136,19 +146,27 @@ if __name__ == '__main__':
         device.setLongitude(y)
         # 0 no te moviment es static, 1 es mou
         device.setMovement(random.randint(0, 1))
-
         deviceID = createDevice(device.jsonRegDoc())
+        socketID = createsocket(deviceID[0])
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID[0])
         device.setToken(deviceID[1])
+        device.setSocket(socketID)
 
         if interval is None:
             interval = 10
+
+        receive_emergency = threading.Thread(taget=capturing_emergency, args=device, name='capturing_emergency')
+        receive_emergency.setDaemon(True)
+        receive_emergency.start()
+        alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
+        alive.setDaemon(False)
         stay_alive(device, interval)
 
+    # Device is Patient
     elif type == 2:
         device = Patient(fake.name())
         building = random.choice(['A', 'B', 'Neapolis'])
@@ -161,22 +179,25 @@ if __name__ == '__main__':
         device.setBlood_pressure(blood_pressure_monitor(device.getBlood_pressure()[0], device.getBlood_pressure()[1]))
 
         deviceID = createDevice(device.jsonRegPac())
+        socketID = createsocket(deviceID[0])
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID[0])
         device.setToken(deviceID[1])
+        #device.setSocket(socketID)
 
         if interval is None:
             interval = 10
         alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
         alive.setDaemon(False)
-        alive.start()
+        stay_alive(device, interval)
 
         # signal nomes pel main thread, passem stay_alive a un altre thread
         receive_button(device)
 
+    # Device is Ambulance
     elif type == 3:
         device = Ambulance()
         route = random.choice([1,2,3,4,5,6])
@@ -184,19 +205,21 @@ if __name__ == '__main__':
         x,y,_,_ = gps(route)
         device.setLatitude(x)
         device.setLongitude(y)
-
         deviceID = createDevice(device.jsonRegAmb())
+        socketID = createsocket(deviceID[0])
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getPlate()))
         device.setId(deviceID[0])
         device.setToken(deviceID[1])
+        device.setSocket(socketID)
 
         if interval is None:
             interval = 5
         stay_alive(device, 5)
 
+    # Device is Smoke_Detector
     elif type == 4:
         device = Smoke_detector()
         building = random.choice(['A', 'B', 'Neapolis'])
@@ -205,21 +228,23 @@ if __name__ == '__main__':
         device.setLatitude(x)
         device.setLongitude(y)
         deviceID = createDevice(device.jsonRegSmoke())
+        #socketID = createsocket(deviceID[0])
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID[0])
         device.setToken(deviceID[1])
-
+        #device.setSocket(socketID)
 
         if interval is None:
             interval = 10
-        stay_alive(device, interval)
-
         alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
         alive.setDaemon(False)
-        alive.start()
+        stay_alive(device, interval)
+
+        # signal nomes pel main thread, passem stay_alive a un altre thread
+        receive_button(device)
 
     elif type == 5:
         device = WeatherStation()
@@ -230,12 +255,14 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegWheather())
+        socketID = createsocket(deviceID[0])
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID[0])
         device.setToken(deviceID[1])
+        device.setSocket(socketID)
 
         if interval is None:
             interval = 900
@@ -250,12 +277,14 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegAir())
+        socketID = createsocket(deviceID[0])
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID[0])
         device.setToken(deviceID[1])
+        device.setSocket(socketID)
 
         if interval is None:
             interval = 300
@@ -271,17 +300,18 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegNur())
+        socketID = createsocket(deviceID[0])
         print(deviceID[0])
         enableDevice(deviceID[0], deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID[0])
         device.setToken(deviceID[1])
+        device.setSocket(socketID)
 
         if interval is None:
             interval = 10
         stay_alive(device, interval)
-
 
     elif type == 8:
         device = Stretcher()
@@ -290,17 +320,24 @@ if __name__ == '__main__':
         x, y = spawn_position(building)
         device.setLatitude(x)
         device.setLongitude(y)
-
         deviceID = createDevice(device.jsonRegStr())
+        socketID = createsocket(deviceID[0])
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getPlate()))
         device.setId(deviceID[0])
         device.setToken(deviceID[1])
+        device.setSocket(socketID)
 
         if interval is None:
             interval = 300
+
+        receive_emergency = threading.Thread(taget=capturing_emergency, args=device, name='capturing_emergency')
+        receive_emergency.setDaemon(True)
+        receive_emergency.start()
+        alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
+        alive.setDaemon(False)
         stay_alive(device, interval)
 
     else:   # default, no type defined
