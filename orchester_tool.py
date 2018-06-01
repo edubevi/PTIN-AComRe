@@ -5,7 +5,7 @@ import time, docker, subprocess, sys, json
 # List of allowed devices with their type id.
 devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5,"air":6, "nurse":7, "stretcher":8}
 # stores the number of devices by type.
-num_devices = {"doctor":0, "patient":0, "ambulance":0,"smoke":0,"weather":0,"air":0, "nurse":0, "stretcher":0}
+num_devices = {"doctor":0, "patient":0, "ambulance":0, "smoke":0, "weather":0, "air":0, "nurse":0, "stretcher":0}
 
 
 def usage():
@@ -42,7 +42,7 @@ def create_container(client, type, num):
     while count != num:
         c_name = type + "_%d" % (num_devices[type])
         c_type = "-t "+str(devices[type])
-        container = client.containers.run("peremontpeo/virtualdevices:latest",c_type,"-i 10", detach=True, name=c_name, auto_remove=True)
+        container = client.containers.run("edubevi/virtualdev:latest",c_type,"-i 10", detach=True, name=c_name, auto_remove=True)
         print("+ Container with short_id=" + container.short_id + " has been created.")
         num_devices[type] += 1
         count += 1
@@ -102,6 +102,7 @@ def list_running_containers(client):
             elif "weather" in container.name: print("weather",end='\t\t')
             elif "air" in container.name: print("airq",end='\t\t')
             elif "nurse" in container.name: print("nurse",end='\t\t')
+            elif "stretcher" in container.name: print("stretcher", end='\t\t')
             else: print("-",end='\t\t')
             print(container.name)
 
@@ -120,8 +121,9 @@ def init_num_devices(client):
     wea_list = client.containers.list(filters={'name': "weather_*"})
     if len(wea_list) != 0: num_devices["weather"] = len(wea_list)
     air_list = client.containers.list(filters={'name': "air_*"})
-    if len(wea_list) != 0: num_devices["air"] = len(air_list)
-
+    if len(air_list) != 0: num_devices["air"] = len(air_list)
+    str_list = client.containers.list(filters={'name': "stretcher_*"})
+    if len(str_list) != 0: num_devices["stretcher"] = len(str_list)
 
 def show_stats():
     subprocess.call(['docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.Container}}" --no-stream'], shell=True)
@@ -149,6 +151,8 @@ def show_types(client):
             print('Weather:', num_devices["weather"], end='\t')
         if num_devices["air"] != 0:
             print('Air quality:', num_devices["air"], end='\t')
+        if num_devices["stretcher"] != 0:
+            print('Stretcher:', num_devices["stretcher"], end='\t')
 
 
 def button_push(client):
@@ -157,37 +161,37 @@ def button_push(client):
     print("------------------------------------")
     container_list = client.containers.list()
     i = 0
-    patient_list = list()
-    if num_devices["patient"] == 0:
+    device_list = list()
+    if num_devices["patient"] == 0 and num_devices["smoke"] == 0:
         print("There are no running containers.")
     else:
         print("NUM\tSHORT_ID\t\tNAME")
         for container in container_list:
-            if "patient" in container.name:
+            if "patient" in container.name or "smoke" in container.name:
                 print(i, end='\t')
                 print(container.short_id, end='\t\t')
                 print(container.name)
-                patient_list.append(container)
+                device_list.append(container)
                 i += 1
 
         print("")
         try:
             op = int(input("Please select a container: "))
-            if op < 0 or op > i+1:
+            print(i)
+            if op < 0 or op >= len(device_list):
                 raise ValueError
+            else:
+                selected = device_list[op]
+                print(selected)
+                try:
+                    get_device_id(selected)
+                    selected.kill("SIGUSR1")
+                    print("Signal enviat")
+                except docker.errors.APIError:
+                    pass
         except (ValueError, TypeError):
                 print("ERROR: Invalid option.")
                 time.sleep(1)
-
-        selected = patient_list[op]
-        print(selected)
-        try:
-            get_device_id(selected)
-            selected.kill("SIGUSR1")
-            print("Signal enviat")
-        except docker.errors.APIError:
-            pass
-
 
 def get_device_id(k):
     # Decode bytes to Unicode

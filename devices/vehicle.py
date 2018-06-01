@@ -12,8 +12,12 @@ class Vehicle:
         self.__plate = self.random_plate()
         self.__route = None
         self.__token = None
+        self.__socket = None
 
     # Getters
+    def getSocket(self):
+        return self.__socket
+
     def getId(self):
         return self.__v_id
 
@@ -33,6 +37,9 @@ class Vehicle:
         return self.__token
 
     # Setters
+    def setSocket(self, s):
+        self.__socket = s
+
     def setId(self, id):
         self.__v_id = id
 
@@ -48,6 +55,7 @@ class Vehicle:
     def setToken(self, t):
         self.__token = t
 
+    # Auxiliars
     def random_plate(self):
         plate = []
         for _ in range(4):
@@ -120,7 +128,7 @@ class Stretcher(Vehicle):
         self.__availability = 1
         self.__battery_level = 100.0
         self.__building = None
-        self.__type = 7
+        self.__type = 8
 
     # Getters
 

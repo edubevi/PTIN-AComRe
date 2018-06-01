@@ -13,7 +13,12 @@ class Person:
         self.__movement = None
         self.__token = None
 
+        self.__socket = None
+
     # Getters
+    def getSocket(self):
+        return self.__socket
+
     def getName(self):
         return self.__name
 
@@ -36,6 +41,9 @@ class Person:
         return self.__token
 
     # Setters
+    def setSocket(self, s):
+        self.__socket = s
+
     def setToken(self, t):
         self.__token = t
 
@@ -72,7 +80,6 @@ class Patient(Person):
        self.__heart_rate = numpy.random.choice(hrate_values,p=[0.08,0.7,0.2,0.02])
        self.__sys = numpy.random.choice(sys_values,p=[0.05,0.7,0.2,0.05])
        self.__dia = numpy.random.choice(dia_values,p=[0.05,0.7,0.2,0.05])
-       self.__doc_proximity = 0
        self.__type = 4
 
     # Getters
@@ -93,6 +100,18 @@ class Patient(Person):
 
     def getBlood_pressure(self):
         return self.__sys, self.__dia
+
+    def getAnomalyType(self):
+        anomaly = False
+        type = None
+        if self.__temp < 36.0 or self.__temp > 39.0:
+            if self.__temp < 36.0: type = "low_temperature"
+            elif self.__temp > 39.0: type = "High_temperature"
+            anomaly = True
+        elif self.__heart_rate < 60 or self.__heart_rate > 130:
+            anomaly = True
+            type = "Heart_attack"
+        return anomaly, type
 
     def getDoc_proximity(self):
         return "%.2f m" % self.__doc_proximity
@@ -144,9 +163,9 @@ class Patient(Person):
 
 class Doctor(Person):
     def __init__(self, name):
-        spec_list = ["GENERAL", "CARDIOLOGIST"]
+        spec_list = ["GENERAL", "CARDIOLOGIST", "SURGERIST"]
         super(Doctor, self).__init__(name)
-        self.__speciality = numpy.random.choice(spec_list,p=[0.5,0.5])
+        self.__speciality = numpy.random.choice(spec_list,p=[0.5, 0.45, 0.05])
         self.__availability = 0
         self.__type = 1
 

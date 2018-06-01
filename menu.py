@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from tkinter import *
-import time, docker, subprocess, sys, json
+import time, docker, subprocess, sys, json, os
 
 # List of allowed devices with their type id.
 devices = {"doctor":1, "patient":2, "ambulance":3,"smoke":4,"weather":5,"air":6, "nurse":7, "stretcher":8}
@@ -74,7 +74,7 @@ def runcontainers():
 
     # Add text for introduce numbers
     text2 = StringVar()
-    Entry(dialeg1, textvariable=text2, width=32).place(x=10, y=120)
+    Entry(dialeg1, textvariable=text2, width=30).place(x=10, y=120)
 
     # Add buttoms for create this containers or close window
     Button(dialeg1, text='Create', command=boton_ok).place(x=65, y=150)
@@ -176,15 +176,27 @@ def stopped_containers():
 
     text_info3 = StringVar()
 
+    container_list = client.containers.list()
+
+
     # Introduce radiobuttoms for select type devices
-    Radiobutton(dialeg2, text="Patient", variable=text_info3, value='patient').place(x=10, y=30)
-    Radiobutton(dialeg2, text="Doctor", variable=text_info3, value='doctor').place(x=10, y=50)
-    Radiobutton(dialeg2, text="Ambulance", variable=text_info3, value='ambulance').place(x=90, y=30)
-    Radiobutton(dialeg2, text="Smoke", variable=text_info3, value='smoke').place(x=90, y=50)
-    Radiobutton(dialeg2, text="Weather", variable=text_info3, value='weather').place(x=190, y=30)
-    Radiobutton(dialeg2, text="Air", variable=text_info3, value='air').place(x=190, y=50)
-    Radiobutton(dialeg2, text="Nurse", variable=text_info3, value='nurse').place(x=50, y=70)
-    Radiobutton(dialeg2, text="Stretcher", variable=text_info3, value='stretcher').place(x=140, y=70)
+    for container in container_list:
+        if "patient" in container.name:
+            Radiobutton(dialeg2, text="Patient", variable=text_info3, value='patient').place(x=10, y=30)
+        elif "doctor" in container.name:
+            Radiobutton(dialeg2, text="Doctor", variable=text_info3, value='doctor').place(x=10, y=50)
+        elif "ambulance" in container.name:
+            Radiobutton(dialeg2, text="Ambulance", variable=text_info3, value='ambulance').place(x=90, y=30)
+        elif "smoke" in container.name:
+            Radiobutton(dialeg2, text="Smoke", variable=text_info3, value='smoke').place(x=90, y=50)
+        elif "weather" in container.name:
+            Radiobutton(dialeg2, text="Weather", variable=text_info3, value='weather').place(x=190, y=30)
+        elif "air" in container.name:
+            Radiobutton(dialeg2, text="Air", variable=text_info3, value='air').place(x=190, y=50)
+        elif "nurse" in container.name:
+            Radiobutton(dialeg2, text="Nurse", variable=text_info3, value='nurse').place(x=50, y=70)
+        elif "stretcher" in container.name:
+            Radiobutton(dialeg2, text="Stretcher", variable=text_info3, value='stretcher').place(x=140, y=70)
 
     # Add label
     runcont2 = StringVar()
@@ -227,57 +239,52 @@ def list_running_containers():
             text_ = container.short_id + '\t'
             t.insert(INSERT, text_)
             t.pack()
-            print(text_,end='\t')
+            print(text_, end='\t')
             if "doctor" in container.name:
                 text_ = "\tdoctor" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "patient" in container.name:
                 text_ = "\tpatient" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "ambulance" in container.name:
                 text_ = "\tambulance" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "smoke" in container.name:
                 text_ = "\tsmoke" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "weather" in container.name:
                 text_ = "\tweather" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "air" in container.name:
                 text_ = "\tairq" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
-            elif "air" in container.name:
-                text_ = "\tair" + '\t\t'
-                t.insert(INSERT, text_)
-                t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "nurse" in container.name:
                 text_ = "\tnurse" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             elif "stretcher" in container.name:
                 text_ = "\tstretcher" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             else:
                 text_ = "\t-" + '\t\t'
                 t.insert(INSERT, text_)
                 t.pack()
-                print(text_,end='\t')
+                print(text_, end='\t')
             text_ = container.name + '\n'
             t.insert(INSERT, text_)
             t.pack()
@@ -304,20 +311,29 @@ def init_num_devices(client):
 
 
 def show_stats():
-    subprocess.call(
-        ['docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.Container}}" --no-stream'],
-        shell=True)
+
+    subprocess.Popen(['gnome-terminal', '--', 'bash'])
+
+    finestra = Toplevel()
+    finestra.title("Show Stats")
+    finestra.geometry("300x40+750+200")
+    Button(finestra, text='Close', command=finestra.destroy).place(x=232, y=5)
+
+    # Add label
+    runcont2 = StringVar()
+    runcont2.set("Introduce 'docker stats' on terminal")
+    Label(finestra, textvariable=runcont2).place(x=10, y=10)
 
 
 def show_types():
     # Create window for print stopped all containers
     finestra = Toplevel()
     finestra.title("List of running container/s")
-    finestra.geometry("350x205+490+300")
-    Button(finestra, text='Close', command=finestra.destroy).place(x=150, y=165)
+    finestra.geometry("200x160+565+310")
+    Button(finestra, text='Close', command=finestra.destroy).place(x=70, y=128)
 
     # Add text for print
-    t = Text(finestra, height=10)
+    t = Text(finestra, height=8)
     text_ = ''
 
     print("Devices per type")
@@ -369,49 +385,98 @@ def show_types():
             t.pack()
             print(text_, end='\t')
 
-# def button_push():
-#     print("------------------------------------")
-#     print("Select a patient")
-#     print("------------------------------------")
-#     container_list = client.containers.list()
-#     i = 0
-#     patient_list = list()
-#     if num_devices["patient"] == 0:
-#         print("There are no running containers.")
-#     else:
-#         print("NUM\tSHORT_ID\t\tNAME")
-#         for container in container_list:
-#             if "patient" in container.name:
-#                 print(i, end='\t')
-#                 print(container.short_id, end='\t\t')
-#                 print(container.name)
-#                 patient_list.append(container)
-#                 i += 1
-#
-#         print("")
-#         try:
-#             op = int(input("Please select a container: "))
-#             if op < 0 or op > i + 1:
-#                 raise ValueError
-#         except (ValueError, TypeError):
-#             print("ERROR: Invalid option.")
-#             time.sleep(1)
-#
-#         selected = patient_list[op]
-#         print(selected)
-#         try:
-#             get_device_id(selected)
-#             selected.kill("SIGUSR1")
-#             print("Signal enviat")
-#         except docker.errors.APIError:
-#             pass
-#
+def button_push():
+    print("------------------------------------")
+    print("Select a patient")
 
-# def get_device_id(k):
-#     # Decode bytes to Unicode
-#     data = k.logs().decode('utf8')
-#     data = data.splitlines()[0]
-#     return data
+    def alarm_push():
+        dialeg4 = Toplevel()
+        dialeg4.title("Select number patient.")
+        dialeg4.geometry("200x100+565+340")
+        Button(dialeg4, text='Close', command=dialeg4.destroy).place(x=70, y=68)
+
+        # Add text for print
+        t = Text(dialeg4, height=4)
+        text_ = ''
+
+        try:
+            op = int(text2.get())
+            if op < 0 or op > i + 1:
+                raise ValueError
+        except (ValueError, TypeError):
+            text_ = "ERROR: Invalid option."
+            t.insert(INSERT, text_)
+            t.pack()
+            print(text_)
+            time.sleep(1)
+
+        selected = patient_list[op]
+        text_ = selected
+        t.insert(INSERT, text_)
+        t.pack()
+        print(text_)
+        try:
+            get_device_id(selected)
+            text_ = '\nNAME: ' + selected.name + '\n' + 'Alarm sended'
+            selected.kill("SIGUSR1")
+            t.insert(INSERT, text_)
+            t.pack()
+            print(text_)
+        except docker.errors.APIError:
+            pass
+
+    # Create window for print stopped all containers
+    finestra = Toplevel()
+    finestra.title("Button emergency")
+    finestra.geometry("270x180+530+300")
+
+    # Add text for print
+    t = Text(finestra, height=6)
+    text_ = ''
+
+    container_list = client.containers.list()
+    i = 0
+    patient_list = list()
+    if num_devices["patient"] == 0:
+        text_ = "There are no running patients."
+        t.insert(INSERT, text_)
+        t.pack()
+        print(text_)
+    else:
+        text_ = 'NUM\tSHORT_ID\t\tNAME\n'
+        t.insert(INSERT, text_)
+        t.pack()
+        print(text_)
+        for container in container_list:
+            if "patient" in container.name:
+                text_ = str(i)+'\t' + container.short_id+ '\t\t' + container.name + '\n'
+                t.insert(INSERT, text_)
+                t.pack()
+                print(text_)
+                # print(i, end='\t')
+                # print(container.short_id, end='\t\t')
+                # print(container.name)
+                patient_list.append(container)
+                i += 1
+
+        # Add label
+        runcont2 = StringVar()
+        runcont2.set("Select one number to send alarm:")
+        Label(finestra, textvariable=runcont2).place(x=10, y=100)
+
+        text2 = StringVar()
+        Entry(finestra, textvariable=text2, width=30).place(x=10, y=120)
+
+        # Add buttoms for create this containers or close window
+        Button(finestra, text='Alarm', command=alarm_push).place(x=65, y=145)
+        Button(finestra, text='Close', command=finestra.destroy).place(x=155, y=145)
+
+
+def get_device_id(k):
+    # Decode bytes to Unicode
+    data = k.logs().decode('utf8')
+    data = data.splitlines()[0]
+    return data
 
 
 def init_num_devices(client):
@@ -452,16 +517,14 @@ if __name__ == '__main__':
 
     boton3 = Button(window, text="Show devices per type", command=show_types, height=1, width=22).place(x=10, y=90)
 
-    # boton4 = Button(window, text="Show containers stats", command=show_stats, height=1, width=22).place(x=10, y=120)
-    #
+    boton4 = Button(window, text="Show containers stats", command=show_stats, height=1, width=22).place(x=10, y=120)
+
     boton5 = Button(window, text="Stop container/s", command=stopped_containers, height=1, width=22).place(x=10, y=150)
 
     boton6 = Button(window, text="Stop all running containers", command=stop_all, height=1, width=22).place(x=10, y=180)
 
-    # boton7 = Button(window, text="Delete all stopped containers", command=runcontainers, height=1, width=22).place(x=10, y=180)
-    #
-    # boton8 = Button(window, text="Push emergency button", command=button_push, height=1, width=22).place(x=10, y=210)
+    boton7 = Button(window, text="Push emergency button", command=button_push, height=1, width=22).place(x=10, y=210)
 
-    boton9 = Button(window, text="Exit", command=window.destroy, height=1, width=22).place(x=10, y=240)
+    boton8 = Button(window, text="Exit", command=window.destroy, height=1, width=22).place(x=10, y=240)
 
     window.mainloop()
