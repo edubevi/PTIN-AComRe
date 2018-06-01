@@ -156,9 +156,10 @@ class Patient(Person):
     def jsonPac(self):
         return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
-                'temp': self.getTemp() ,
-                'heart': self.getHeart_rate(),
-                'bloodD': self.getBlood_pressure()}
+                'body_temperature': self.getTemp() ,
+                'heart_rate': self.getHeart_rate(),
+                'blood_pressure_systolic': self.getBlood_pressure()[0],
+                'blood_pressure_diastolic': self.getBlood_pressure()[1]}
 
 
 class Doctor(Person):
@@ -210,11 +211,11 @@ class Doctor(Person):
 
     def jsonRegDoc(self):
         return {'name': self.getName(),
-                'type': self.getType()}
+                'type': self.getType(),
+                'additional_info':{'type':self.getSpec()}}
 
     def jsonDoc(self):
-        return {'speciality': self.getSpec(),
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude()}
 
 
