@@ -33,8 +33,7 @@ def runcontainers():
         while count != num:
             c_name = type + "_%d" % (num_devices[type])
             c_type = "-t " + str(devices[type])
-            container = client.containers.run("peremontpeo/virtualdevices:latest", c_type, detach=True, name=c_name,
-                                              auto_remove=True)
+            container = client.containers.run("peremontpeo/virtualdevices:latest",c_type,"-i 10", detach=True, name=c_name, auto_remove=True)
             text_ = " + Container with short_id=" + container.short_id + " has been created.\n"
 
             t.insert(INSERT, text_)
@@ -182,21 +181,29 @@ def stopped_containers():
     # Introduce radiobuttoms for select type devices
     for container in container_list:
         if "patient" in container.name:
-            Radiobutton(dialeg2, text="Patient", variable=text_info3, value='patient').place(x=10, y=30)
+            x = 'Patient(' + str(num_devices["patient"]) + ')'
+            Radiobutton(dialeg2, text=x, variable=text_info3, value='patient').place(x=10, y=30)
         elif "doctor" in container.name:
-            Radiobutton(dialeg2, text="Doctor", variable=text_info3, value='doctor').place(x=10, y=50)
+            x = 'Doctor(' + str(num_devices["doctor"]) + ')'
+            Radiobutton(dialeg2, text=x, variable=text_info3, value='doctor').place(x=10, y=50)
         elif "ambulance" in container.name:
-            Radiobutton(dialeg2, text="Ambulance", variable=text_info3, value='ambulance').place(x=90, y=30)
+            x = 'Ambulance(' + str(num_devices["ambulance"]) + ')'
+            Radiobutton(dialeg2, text=x, variable=text_info3, value='ambulance').place(x=90, y=30)
         elif "smoke" in container.name:
-            Radiobutton(dialeg2, text="Smoke", variable=text_info3, value='smoke').place(x=90, y=50)
+            x = 'Smoke(' + str(num_devices["smoke"]) + ')'
+            Radiobutton(dialeg2, text=x, variable=text_info3, value='smoke').place(x=90, y=50)
         elif "weather" in container.name:
-            Radiobutton(dialeg2, text="Weather", variable=text_info3, value='weather').place(x=190, y=30)
+            x = 'Weather(' + str(num_devices["weather"]) + ')'
+            Radiobutton(dialeg2, text=x, variable=text_info3, value='weather').place(x=190, y=30)
         elif "air" in container.name:
-            Radiobutton(dialeg2, text="Air", variable=text_info3, value='air').place(x=190, y=50)
+            x = 'Air(' + str(num_devices["air"]) + ')'
+            Radiobutton(dialeg2, text=x, variable=text_info3, value='air').place(x=190, y=50)
         elif "nurse" in container.name:
-            Radiobutton(dialeg2, text="Nurse", variable=text_info3, value='nurse').place(x=50, y=70)
+            x = 'Nurse(' + str(num_devices["nurse"]) + ')'
+            Radiobutton(dialeg2, text=x, variable=text_info3, value='nurse').place(x=50, y=70)
         elif "stretcher" in container.name:
-            Radiobutton(dialeg2, text="Stretcher", variable=text_info3, value='stretcher').place(x=140, y=70)
+            x = 'Stretcher(' + str(num_devices["stretcher"]) + ')'
+            Radiobutton(dialeg2, text=x, variable=text_info3, value='stretcher').place(x=140, y=70)
 
     # Add label
     runcont2 = StringVar()
