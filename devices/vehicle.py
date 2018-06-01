@@ -12,11 +12,11 @@ class Vehicle:
         self.__plate = self.random_plate()
         self.__route = None
         self.__token = None
-        self.__socket = None
+        self.__backendID = None
 
     # Getters
-    def getSocket(self):
-        return self.__socket
+    def getBackendID(self):
+        return self.__backendID
 
     def getId(self):
         return self.__v_id
@@ -37,8 +37,8 @@ class Vehicle:
         return self.__token
 
     # Setters
-    def setSocket(self, s):
-        self.__socket = s
+    def setBackendID(self, s):
+        self.__backendID = s
 
     def setId(self, id):
         self.__v_id = id

@@ -12,12 +12,11 @@ class Person:
         self.__building = None
         self.__movement = None
         self.__token = None
-
-        self.__socket = None
+        self.__backendID = None
 
     # Getters
-    def getSocket(self):
-        return self.__socket
+    def getBackendID(self):
+        return self.__backendID
 
     def getName(self):
         return self.__name
@@ -41,7 +40,7 @@ class Person:
         return self.__token
 
     # Setters
-    def setSocket(self, s):
+    def setBackendID(self, s):
         self.__socket = s
 
     def setToken(self, t):
@@ -101,17 +100,13 @@ class Patient(Person):
     def getBlood_pressure(self):
         return self.__sys, self.__dia
 
-    def getAnomalyType(self):
+    def getAnomaly(self):
         anomaly = False
-        type = None
         if self.__temp < 36.0 or self.__temp > 39.0:
-            if self.__temp < 36.0: type = "low_temperature"
-            elif self.__temp > 39.0: type = "High_temperature"
             anomaly = True
         elif self.__heart_rate < 60 or self.__heart_rate > 130:
             anomaly = True
-            type = "Heart_attack"
-        return anomaly, type
+        return anomaly
 
     def getDoc_proximity(self):
         return "%.2f m" % self.__doc_proximity

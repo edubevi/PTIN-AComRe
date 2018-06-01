@@ -12,12 +12,12 @@ class Static_Device:
         fake = Faker()
         self.__name = fake.mac_address()
         self.__token = None
-        self.__socket = None
+        self.__backendID = None
 
 
     # Getters
-    def getSocket(self):
-        return self.__socket
+    def getBackendID(self):
+        return self.__backendID
 
     def getIdDev(self):
         return self.__idDev
@@ -39,8 +39,8 @@ class Static_Device:
 
 
     # Setters
-    def setSocket(self, s):
-        self.__socket = s
+    def setBackendID(self, s):
+        self.__backendID = s
 
     def setIdDev(self, idDev):
         self.__idDev = idDev
