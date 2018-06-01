@@ -14,11 +14,12 @@ import signal, time
 
 
 def capturing_emergency(dev):
-    ''' Funcio que executara el dispositiu Doctor i Stretcher(Camilla) que capturara el missatge enviat pel Backend per Socket en el servei
+    ''' Funcio que executa el dispositiu Doctor que captura el missatge enviat pel Backend per Socket en el servei
     Doctor-Pacient per tal d'establir una ruta al pacient que te una emergencia.'''
 
     while 1:
         try:
+            '''
             data = socketreceive(dev.getSocket())
             if data:
                 patient_device_= data['requester']
@@ -26,7 +27,7 @@ def capturing_emergency(dev):
                 dev.setLongitude(data['longitude'])
                 dev.setAvailability(1)
                 time.sleep(600) # Establim que estara 10 minuts ocupat i despres torna a estar disponible
-                dev.setAvailability(0)
+                dev.setAvailability(0)'''
         except:
             #print("Error al llegir del socket")
             pass
@@ -37,14 +38,20 @@ def receive_button(d):
         # signal.signal(signal.SIGUSR1, receive_signal)
         signal.sigwait((signal.SIGUSR1,))
         print('¡Button pushed!')
-        if d.getType() == 3: # Envia senyal d'alarma d'incendis
-            #Descomentar quan socketsend estigui acabada
-            #socketsend('fire', d.getLatitude(), d.getLongitude(), d.getSocket())
+        if d.getType() == 3: # Envia senyal d'alarma el detector de fums
+            functionSocket(d.getBackendID(),d.getLongitude(),d.getLatitude(),'fire')
+            d.setStatus(1)
+            print(d.getStatus())
             print("Alarma d'incendi enviada!")
-        elif d.getType() == 4: # Envia senyal d'alarma Pacient
-            #Descomentar quan socketsend estigui acabada
-            #socketsend(2, d.getLatitude(), d.getLongitude(), d.getSocket())
-            print("Emergencia enviada!")
+        elif d.getType() == 4: # Envia senyal d'alarma el Pacient
+            anomaly_on_sensors = d.getAnomaly()
+            if anomaly_on_sensors == True:
+                print("Emergencia enviada (sensors)!")
+                functionSocket(d.getBackendID(),d.getLongitude(),d.getLatitude(),'pacientEmitAlarm')
+            else:
+                print("Emergencia enviada (general)!")
+                functionSocket(d.getBackendID(),d.getLongitude(),d.getLatitude(),'pacientEmitGeneral')
+
 
 
 def stay_alive(dev, timer):
@@ -109,11 +116,12 @@ def stay_alive(dev, timer):
         print(data)
         updateDevice(dev.getPersonalid(), data, dev.getToken())
     # Stretcher
+    '''
     elif type == 8:
         data = dev.jsonStr()
         print(data)
         updateDevice(dev.getId(), data, dev.getToken())
-
+    '''
 
 def usage():
     print("usage: main.py -t <device_type> -i <time_interval>")
@@ -147,14 +155,14 @@ if __name__ == '__main__':
         # 0 no te moviment es static, 1 es mou
         device.setMovement(random.randint(0, 1))
         deviceID = createDevice(device.jsonRegDoc())
-        socketID = createsocket(deviceID[0])
+        device.setBackendID(deviceID)
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID[0])
         device.setToken(deviceID[1])
-        device.setSocket(socketID)
+        device.setBackendID(deviceID)
 
         if interval is None:
             interval = 10
@@ -179,14 +187,13 @@ if __name__ == '__main__':
         device.setBlood_pressure(blood_pressure_monitor(device.getBlood_pressure()[0], device.getBlood_pressure()[1]))
 
         deviceID = createDevice(device.jsonRegPac())
-        socketID = createsocket(deviceID[0])
+        device.setBackendID(deviceID)
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID[0])
         device.setToken(deviceID[1])
-        #device.setSocket(socketID)
 
         if interval is None:
             interval = 10
@@ -206,14 +213,14 @@ if __name__ == '__main__':
         device.setLatitude(x)
         device.setLongitude(y)
         deviceID = createDevice(device.jsonRegAmb())
-        socketID = createsocket(deviceID[0])
+        #socketID = createsocket(deviceID[0])
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getPlate()))
         device.setId(deviceID[0])
         device.setToken(deviceID[1])
-        device.setSocket(socketID)
+        #device.setSocket(socketID)
 
         if interval is None:
             interval = 5
@@ -228,14 +235,15 @@ if __name__ == '__main__':
         device.setLatitude(x)
         device.setLongitude(y)
         deviceID = createDevice(device.jsonRegSmoke())
-        #socketID = createsocket(deviceID[0])
+        device.setBackendID(deviceID)
+
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID[0])
         device.setToken(deviceID[1])
-        #device.setSocket(socketID)
+
 
         if interval is None:
             interval = 10
@@ -255,14 +263,13 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegWheather())
-        socketID = createsocket(deviceID[0])
+        device.setBackendID(deviceID)
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID[0])
         device.setToken(deviceID[1])
-        device.setSocket(socketID)
 
         if interval is None:
             interval = 900
@@ -277,14 +284,13 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegAir())
-        socketID = createsocket(deviceID[0])
+        device.setBackendID(deviceID)
         print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setIdDev(deviceID[0])
         device.setToken(deviceID[1])
-        device.setSocket(socketID)
 
         if interval is None:
             interval = 300
@@ -300,45 +306,44 @@ if __name__ == '__main__':
         device.setLongitude(y)
 
         deviceID = createDevice(device.jsonRegNur())
-        socketID = createsocket(deviceID[0])
+        device.setBackendID(deviceID)
         print(deviceID[0])
         enableDevice(deviceID[0], deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
         device.setPersonalid(deviceID[0])
         device.setToken(deviceID[1])
-        device.setSocket(socketID)
 
         if interval is None:
             interval = 10
         stay_alive(device, interval)
 
-    elif type == 8:
-        device = Stretcher()
-        building = random.choice(['A', 'B', 'Neapolis'])
-        device.setBuilding(building)
-        x, y = spawn_position(building)
-        device.setLatitude(x)
-        device.setLongitude(y)
-        deviceID = createDevice(device.jsonRegStr())
-        socketID = createsocket(deviceID[0])
-        print(deviceID[0])
-        enableDevice(deviceID[0],deviceID[1])
-        print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID[0]))
-        print(jsonfy_data(deviceID, type, device.getPlate()))
-        device.setId(deviceID[0])
-        device.setToken(deviceID[1])
-        device.setSocket(socketID)
+    #elif type == 8:
+    #   device = Stretcher()
+    #   building = random.choice(['A', 'B', 'Neapolis'])
+    #    device.setBuilding(building)
+    #    x, y = spawn_position(building)
+    #    device.setLatitude(x)
+    #    device.setLongitude(y)
+    #    deviceID = createDevice(device.jsonRegStr())
+    #    socketID = createsocket(deviceID[0])
+    #    print(deviceID[0])
+    #    enableDevice(deviceID[0],deviceID[1])
+    #    print("API: device type %d with name %s registered with ID %s" % (type, device.getPlate(), deviceID[0]))
+    #    print(jsonfy_data(deviceID, type, device.getPlate()))
+    #    device.setId(deviceID[0])
+    #    device.setToken(deviceID[1])
+    #    device.setSocket(socketID)
 
-        if interval is None:
-            interval = 300
+    #    if interval is None:
+    #        interval = 300
 
-        receive_emergency = threading.Thread(target=capturing_emergency, args=(device,), name='capturing_emergency')
-        receive_emergency.setDaemon(True)
-        receive_emergency.start()
-        alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
-        alive.setDaemon(False)
-        stay_alive(device, interval)
+    #    receive_emergency = threading.Thread(target=capturing_emergency, args=(device,), name='capturing_emergency')
+    #    receive_emergency.setDaemon(True)
+    #    receive_emergency.start()
+    #    alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
+    #    alive.setDaemon(False)
+    #    stay_alive(device, interval)
 
     else:   # default, no type defined
         usage()
