@@ -167,4 +167,4 @@ class WeatherStation(Static_Device):
                 'longitude': self.getLongitude(),
                 'temperature': self.__temp,
                 'humidity': self.__hum,
-                'air': self.__air}
+                'air_pressure': self.__air}
