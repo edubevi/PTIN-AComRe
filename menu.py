@@ -377,7 +377,7 @@ def show_types():
             t.pack()
             print(text_, end='\t')
         if num_devices["air"] != 0:
-            text_ = 'Air quality:' + str(num_devices["air"]) + '\t'
+            text_ = 'Air quality:' + str(num_devices["air"]) + '\n'
             t.insert(INSERT, text_)
             t.pack()
             print(text_, end='\t')
