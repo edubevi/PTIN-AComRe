@@ -118,8 +118,9 @@ class Ambulance(Vehicle):
     def jsonAmb(self):
         return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
-                'fuel': self.getFuelAmount(),
-                'pressure': self.getTirePressure()}
+                'gas_level': self.getFuelAmount(),
+                'tyre_pressure_alarm': self.getTirePressure(),
+                'availability': self.getAvailability()}
 
 class Stretcher(Vehicle):
 
