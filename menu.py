@@ -166,7 +166,7 @@ def stopped_containers():
     # Create window menu create containers
     dialeg2 = Toplevel(window)
     dialeg2.title("Stop container/s")
-    dialeg2.geometry("280x180+530+300")
+    dialeg2.geometry("310x180+530+300")
 
     # Add label
     runcont = StringVar()
@@ -194,10 +194,10 @@ def stopped_containers():
             Radiobutton(dialeg2, text=x, variable=text_info3, value='smoke').place(x=90, y=50)
         elif "weather" in container.name:
             x = 'Weather(' + str(num_devices["weather"]) + ')'
-            Radiobutton(dialeg2, text=x, variable=text_info3, value='weather').place(x=190, y=30)
+            Radiobutton(dialeg2, text=x, variable=text_info3, value='weather').place(x=210, y=30)
         elif "air" in container.name:
             x = 'Air(' + str(num_devices["air"]) + ')'
-            Radiobutton(dialeg2, text=x, variable=text_info3, value='air').place(x=190, y=50)
+            Radiobutton(dialeg2, text=x, variable=text_info3, value='air').place(x=210, y=50)
         elif "nurse" in container.name:
             x = 'Nurse(' + str(num_devices["nurse"]) + ')'
             Radiobutton(dialeg2, text=x, variable=text_info3, value='nurse').place(x=50, y=70)
@@ -212,11 +212,11 @@ def stopped_containers():
 
     # Add text for introduce numbers
     text2 = StringVar()
-    Entry(dialeg2, textvariable=text2, width=32).place(x=10, y=120)
+    Entry(dialeg2, textvariable=text2, width=35).place(x=10, y=120)
 
     # Add buttoms for create this containers or close window
-    Button(dialeg2, text='Stop', command=boton_stop).place(x=65, y=150)
-    Button(dialeg2, text='Close', command=dialeg2.destroy).place(x=155, y=150)
+    Button(dialeg2, text='Stop', command=boton_stop).place(x=85, y=150)
+    Button(dialeg2, text='Close', command=dialeg2.destroy).place(x=175, y=150)
 
 
 def list_running_containers():
