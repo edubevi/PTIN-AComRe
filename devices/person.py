@@ -135,8 +135,7 @@ class Patient(Person):
                 'type': self.getType()}
 
     def jsonPac(self):
-        return {'id': self.getPersonalid(),
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'temp': self.getTemp() ,
                 'heart': self.getHeart_rate(),
@@ -195,8 +194,7 @@ class Doctor(Person):
                 'type': self.getType()}
 
     def jsonDoc(self):
-        return {'id': self.getPersonalid(),
-                'speciality': self.getSpec(),
+        return {'speciality': self.getSpec(),
                 'latitude': self.getLatitude(),
                 'longitude': self.getLongitude()}
 
@@ -226,6 +224,5 @@ class Nurse(Person):
                 'type': self.getType()}
 
     def jsonNur(self):
-        return {'id': self.getPersonalid(),
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude()}

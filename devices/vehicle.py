@@ -108,8 +108,7 @@ class Ambulance(Vehicle):
                 'type': self.getType()}
 
     def jsonAmb(self):
-        return {'id': self.getId(),
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'fuel': self.getFuelAmount(),
                 'pressure': self.getTirePressure()}
@@ -165,7 +164,6 @@ class Stretcher(Vehicle):
                 'type': self.getType()}
 
     def jsonStr(self):
-        return {'id': self.getId(),
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'battery': self.getBatterylevel()}

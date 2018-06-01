@@ -84,8 +84,7 @@ class Smoke_detector(Static_Device):
                 'type': self.getType()}
 
     def jsonSmoke(self):
-        return {'id': self.getIdDev(),
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'status': self.getStatus()}
 
@@ -114,8 +113,7 @@ class AirQuality(Static_Device):
                 'type': self.getType()}
 
     def jsonAir(self):
-        return {'id': self.getIdDev(),
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'no2': self.__no2,
                 'pm10': self.__pm10}
@@ -158,8 +156,7 @@ class WeatherStation(Static_Device):
                 'type': self.getType()}
 
     def jsonWeather(self):
-        return {'id': self.getIdDev(),
-                'latitude': self.getLatitude(),
+        return {'latitude': self.getLatitude(),
                 'longitude': self.getLongitude(),
                 'temperature': self.__temp,
                 'humidity': self.__hum,
