@@ -68,10 +68,5 @@ def functionSocket(id, longitude, latitude, argument):
        socketIO.wait(seconds=10)
        print("Emit OK")
 
-   elif (argument == 'fire'):
-       socketIO.wait(seconds=3)
-       socketIO.emit('fire')
-       print("Emit OK")
-
    else:
        print('Error in argument [create, pacientEmitAlarm, doctorListen or pacientEmitGeneral]')
