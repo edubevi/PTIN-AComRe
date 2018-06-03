@@ -41,7 +41,6 @@ def receive_button(d):
         if d.getType() == 3: # Envia senyal d'alarma el detector de fums
             functionSocket(d.getBackendID(),d.getLongitude(),d.getLatitude(),'fire')
             d.setStatus(1)
-            print(d.getStatus())
             print("Alarma d'incendi enviada!")
         elif d.getType() == 4: # Envia senyal d'alarma el Pacient
             anomaly_on_sensors = d.getAnomaly()
@@ -51,7 +50,6 @@ def receive_button(d):
             else:
                 print("Emergencia enviada (general)!")
                 functionSocket(d.getBackendID(),d.getLongitude(),d.getLatitude(),'pacientEmitGeneral')
-
 
 
 def stay_alive(dev, timer):
@@ -167,9 +165,9 @@ if __name__ == '__main__':
         if interval is None:
             interval = 10
 
-        receive_emergency = threading.Thread(target=capturing_emergency, args=(device,), name='capturing_emergency')
-        receive_emergency.setDaemon(True)
-        receive_emergency.start()
+        #receive_emergency = threading.Thread(target=capturing_emergency, args=(device,), name='capturing_emergency')
+        #receive_emergency.setDaemon(True)
+        #receive_emergency.start()
         alive = threading.Thread(target=stay_alive, args=(device, interval,), name='stay_alive')
         alive.setDaemon(False)
         stay_alive(device, interval)
@@ -188,7 +186,6 @@ if __name__ == '__main__':
 
         deviceID = createDevice(device.jsonRegPac())
         device.setBackendID(deviceID)
-        print(deviceID[0])
         enableDevice(deviceID[0],deviceID[1])
         print("API: device type %d with name %s registered with ID %s" % (type, device.getName(), deviceID[0]))
         print(jsonfy_data(deviceID, type, device.getName()))
